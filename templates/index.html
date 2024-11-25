@@ -1,0 +1,62 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Character Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>AI Character Dashboard</h1>
+    </header>
+
+    <main>
+        <section id="current-activity">
+            <h2>Current Activity</h2>
+            <p>Activity: <span id="activity-name">None</span></p>
+            <p>Start Time: <span id="activity-start-time">N/A</span></p>
+            <p>Duration: <span id="activity-duration">0s</span></p>
+        </section>
+
+        <section id="stats">
+            <h2>Character Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Energy</span>
+                    <span id="energy" class="stat-value">100</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Happiness</span>
+                    <span id="happiness" class="stat-value">50</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">XP</span>
+                    <span id="xp" class="stat-value">0</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="history-section">
+            <h2>Activity History</h2>
+            <table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Activity</th>
+                        <th>Result</th>
+                        <th>Duration (s)</th>
+                        <th>State Changes</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <!-- Activity history will be populated here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

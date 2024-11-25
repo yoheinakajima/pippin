@@ -1,0 +1,97 @@
+/* static/style.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    margin: 20px;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+#current-activity {
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+#current-activity p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#stats {
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 16px;
+    color: #888;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#history-section {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+#history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#history-table th, #history-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#history-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+#history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#history-table tr:hover {
+    background-color: #e2e2e2;
+}
+
+@media screen and (max-width: 600px) {
+    .stats-grid {
+        flex-direction: column;
+    }
+}
