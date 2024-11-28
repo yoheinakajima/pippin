@@ -11,7 +11,8 @@ dependencies = [
     "fastapi>=0.115.5",
     "uvicorn>=0.32.1",
     "numpy>=1.26.4",
-    "scikit-learn>=1.5.1"
+    "scikit-learn>=1.5.1",
+    "openai>=1.55.2",
 ]
 
 [tool.setuptools]
