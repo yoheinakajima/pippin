@@ -1,47 +1,66 @@
 # activities/template_activity.py
-
 import asyncio
 import random
+import json
 
 async def run(state, memory):
     """
     Activity: Template Activity
-    Description: This is a template for creating new activities.
+    Description: Template showing memory search capabilities.
     """
-
     # Simulate activity duration
-    duration = random.randint(1, 3)  # Duration in seconds
-    await asyncio.sleep(duration)  # Simulate time passing
+    duration = random.randint(1, 3)
+    await asyncio.sleep(duration)
 
-    # Access and modify state variables
-    state.energy = max(state.energy - 10, 0)  # Decrease energy
-    state.happiness = min(state.happiness + 5, 100)  # Increase happiness
-    state.xp += 5  # Increase experience points
+    # Update state
+    state.energy = max(state.energy - 10, 0)
+    state.happiness = min(state.happiness + 5, 100)
+    state.xp += 5
 
-    # Access memories
-    # Fetch the last 5 activity logs
-    async with memory.get_db_connection() as db:
-        cursor = await db.execute('''
-            SELECT activity, result, timestamp
-            FROM activity_logs
-            ORDER BY id DESC
-            LIMIT 5
-        ''')
-        recent_memories = await cursor.fetchall()
+    # Define a search query
+    search_query = "I am feeling energetic and happy"
 
-    # Process memories (example: print or analyze them)
-    # For this template, we'll just count them
-    memory_count = len(recent_memories)
+    # Find similar memories
+    similar_memories = await memory.find_similar_memories(
+        text=search_query,
+        top_n=3,  # Get top 3 similar memories
+        activity_type=None,  # Search all activity types
+        source=None  # Search all sources
+    )
 
-    # Store the result of the activity
+    # Format the similar memories for display
+    memory_summary = []
+    for mem in similar_memories:
+        memory_summary.append({
+            'id': mem['id'],
+            'activity': mem['activity'],
+            'similarity_result': mem['result']
+        })
+
+    # Create result message
+    result_data = {
+        'search_query': search_query,
+        'similar_memories': memory_summary,
+        'total_found': len(memory_summary)
+    }
+
+    # Store activity with detailed result
     entry = {
         'activity': 'template_activity',
-        'result': f'Processed {memory_count} recent memories',
-        'energy': state.energy,
-        'happiness': state.happiness,
-        'xp': state.xp
+        'result': json.dumps(result_data, indent=2),  # Pretty print the JSON
+        'state_changes': {
+            'energy': -10,
+            'happiness': 5,
+            'xp': 5
+        },
+        'final_state': {
+            'energy': state.energy,
+            'happiness': state.happiness,
+            'xp': state.xp
+        }
     }
+
     await memory.store_activity(entry)
 
-    # Additional actions can be performed here
-    # e.g., interacting with external APIs, triggering events, etc.
+    # Return the activity outcome
+    return f"Found {len(memory_summary)} similar memories to query: '{search_query}'"

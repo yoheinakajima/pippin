@@ -4,10 +4,19 @@ import asyncio
 import time
 from copy import deepcopy
 from functools import wraps
+import uuid
+import contextvars
+
+# Context variable to store the current activity_id
+current_activity_id = contextvars.ContextVar('current_activity_id', default=None)
 
 def activity_wrapper(func):
     @wraps(func)
     async def wrapper(state, memory):
+        # Generate a unique activity_id
+        activity_id = str(uuid.uuid4())
+        current_activity_id.set(activity_id)
+
         # Record start time
         start_time = time.time()
 
@@ -32,13 +41,16 @@ def activity_wrapper(func):
         # Prepare the activity log entry
         activity_name = func.__module__.split('.')[-1]
         entry = {
+            'activity_id': activity_id,
             'activity': activity_name,
             'result': 'completed',
             'start_time': start_time,
             'end_time': end_time,
             'duration': duration,
             'state_changes': state_changes,
-            'final_state': state_after
+            'final_state': state_after,
+            'source': 'core_loop',
+            'parent_id': None  # No parent for core loop activities
         }
 
         # Store the activity log entry
