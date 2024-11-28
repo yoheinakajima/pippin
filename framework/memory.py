@@ -16,7 +16,10 @@ current_activity_id = contextvars.ContextVar('current_activity_id', default=None
 class Memory:
     def __init__(self, db_name='memory.db'):
         self.db_name = db_name
-        self.client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        self.client = AsyncOpenAI(
+            api_key=os.getenv('OPENAI_API_KEY'),
+            base_url=os.getenv('OPENAI_BASE_URL')
+        )
         if not self.client.api_key:
             print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
 

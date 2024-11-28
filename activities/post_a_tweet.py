@@ -54,7 +54,10 @@ async def run(state, memory):
     Description: Generates a tweet based on recent memories, ensuring variety.
     """
     # Initialize OpenAI client
-    client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    client = AsyncOpenAI(
+        api_key=os.getenv('OPENAI_API_KEY'),
+        base_url=os.getenv('OPENAI_BASE_URL')
+    )
     if not client.api_key:
         print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
         return
