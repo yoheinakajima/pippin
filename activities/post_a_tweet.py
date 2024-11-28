@@ -2,6 +2,51 @@ import asyncio
 import os
 import json
 from openai import AsyncOpenAI
+from requests_oauthlib import OAuth1Session
+
+# Set to True to actually post to Twitter, False to skip posting
+ENABLE_TWITTER_POSTING = False
+
+class TwitterError(Exception):
+    """Custom exception for Twitter API errors"""
+    pass
+
+async def post_to_twitter(text: str) -> dict:
+    """Post a tweet to Twitter using OAuth 1.0a"""
+    # Get credentials
+    api_key = os.getenv("TWITTER_API_KEY")
+    api_secret = os.getenv("TWITTER_API_KEY_SECRET")
+    access_token = os.getenv("TWITTER_ACCESS_TOKEN")
+    access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+
+    if not all([api_key, api_secret, access_token, access_token_secret]):
+        raise TwitterError("Missing required Twitter credentials")
+
+    try:
+        # Create OAuth session
+        oauth = OAuth1Session(
+            client_key=api_key,
+            client_secret=api_secret,
+            resource_owner_key=access_token,
+            resource_owner_secret=access_token_secret,
+        )
+
+        # Post tweet
+        response = oauth.post(
+            "https://api.twitter.com/2/tweets",
+            json={"text": text}
+        )
+
+        if response.status_code != 201:
+            error_data = response.json() if response.text else {}
+            raise TwitterError(f"Failed to post tweet: {error_data}")
+
+        return response.json()
+
+    except Exception as e:
+        if isinstance(e, TwitterError):
+            raise
+        raise TwitterError(f"Error posting tweet: {str(e)}")
 
 async def run(state, memory):
     """
@@ -40,6 +85,7 @@ async def run(state, memory):
     try:
         system_prompt = """You are Pippin, a quirky, round unicorn with stick-thin legs, a tiny yellow triangle horn, and a single wavy pink strand as a tail. 
         You see the world through a lens of curiosity, wonder, and gentle humor. You delight in the simple, magical things in life and love sharing your whimsical thoughts.
+        Consider your recent tweets as anti-examples so if the last tweet was long, make the next tweet short. You'll be provided with recent memories, which you should incorporate if you feel like it, and also recent tweets, which I want you to use as anti-examples to keep variety of style, category, and content varied.
 
         Key Tweet Categories:
         1. Whimsical Observations: Notice magic in everyday moments (clouds humming, whispers in the wind, mushrooms listening)
@@ -77,28 +123,37 @@ async def run(state, memory):
         - Sometimes include your signature wobbliness or tiny horn in the story"""
 
         completion = await client.chat.completions.create(
-            model="gpt-4-turbo-preview",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": f"""
-                Recent experiences:
+                Recent experiences (see if there is inspiration here to include in tweet):
                 {json.dumps(recent_memories, indent=2)}
 
-                Recent tweets (do not repeat these):
+                Recent tweets to use this as reference to keep variety in tweets, meaning change the style and context from these:
                 {json.dumps(recent_tweets, indent=2)}
 
-                Generate a unique tweet that:
+                Generate a unique tweet that analyzes above recent tweets to create a tweet that:
                 1. Differs from recent tweets in both topic and style
                 2. Matches Pippin's voice and personality
                 3. Fits one of the key tweet categories
                 4. Includes 1-2 emojis naturally
-                5. Is under 280 characters
+                5. Is under 140 characters
                 """}
             ]
         )
 
         # Extract tweet content
         tweet_content = completion.choices[0].message.content.strip()
+
+        # Post to Twitter if enabled
+        if ENABLE_TWITTER_POSTING:
+            try:
+                result = await post_to_twitter(tweet_content)
+                print(f"Tweet posted successfully! ID: {result['data']['id']}")
+            except TwitterError as e:
+                print(f"Failed to post to Twitter: {str(e)}")
+                print("Continuing to store in memory...")
 
         # Simulate tweet posting delay
         await asyncio.sleep(2)
@@ -113,5 +168,5 @@ async def run(state, memory):
         return tweet_content
 
     except Exception as e:
-        print(f"Error posting tweet: {str(e)}")
+        print(f"Error generating tweet: {str(e)}")
         return "Pippin got distracted by a shiny object and forgot what he was going to say."
