@@ -7,11 +7,8 @@ from openai import AsyncOpenAI
 import litellm
 from PIL import Image
 import io
-import svglib.svglib
-from reportlab.graphics import renderPM
 from pathlib import Path
 
-# Ensure static/images directory exists
 IMAGES_DIR = Path("static/images")
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -21,13 +18,11 @@ async def run(state, memory):
     Description: Pippin creates a whimsical illustration based on a recent memory.
     """
     try:
-        # Initialize OpenAI client
         client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
         if not client.api_key:
             print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
             return "Pippin couldn't find his drawing supplies."
 
-        # Fetch recent memories
         async with memory.get_db_connection() as db:
             cursor = await db.execute('''
                 SELECT result 
@@ -42,10 +37,8 @@ async def run(state, memory):
         if not recent_memories:
             return "Pippin couldn't find any memories to draw."
 
-        # Select the most recent memory
         selected_memory = recent_memories[0]
 
-        # Extract the scene to illustrate
         scene_response = await client.chat.completions.create(
             model="gpt-4-turbo-preview",
             messages=[
@@ -61,16 +54,17 @@ async def run(state, memory):
         )
         scene_info = scene_response.choices[0].message.content
 
-        # Generate SVG using o1-mini
         svg_prompt = f"""Create a whimsical, cute SVG illustration based on this scene:
         {scene_info}
 
         Requirements:
         - Keep the SVG simple and clean
-        - Use soft, friendly colors
+        - Use solid colors instead of gradients
         - Include a viewBox attribute
         - Make it suitable for a children's book illustration
         - Ensure the SVG is well-formed and complete
+        - Avoid using gradients, patterns, or filters
+        - Use only basic SVG elements (path, rect, circle, etc.)
 
         Respond only with the SVG code."""
 
@@ -80,7 +74,6 @@ async def run(state, memory):
         )
         svg_text = svg_response['choices'][0]['message']['content']
 
-        # Extract SVG code
         svg_pattern = re.compile(r'<svg[\s\S]*?<\/svg>', re.IGNORECASE)
         svg_match = svg_pattern.search(svg_text)
         if not svg_match:
@@ -88,32 +81,27 @@ async def run(state, memory):
 
         svg_code = svg_match.group(0)
 
-        # Save as JPEG
-        timestamp = int(time.time())
-        filename = f"pippin_drawing_{timestamp}.jpg"
-
         try:
-            # First save SVG to a temporary file
+            print(f"Saving files to directory: {IMAGES_DIR}")
+
+            timestamp = int(time.time())
+            filename = f"pippin_drawing_{timestamp}.jpg"
             temp_svg = IMAGES_DIR / f"temp_{timestamp}.svg"
+
+            print(f"Saving SVG to: {temp_svg}")
             with open(temp_svg, 'w') as f:
                 f.write(svg_code)
 
-            # Convert SVG to PNG using svglib
-            drawing = svglib.svglib.svg2rlg(str(temp_svg))
-
-            # Save as PNG first
-            temp_png = IMAGES_DIR / f"temp_{timestamp}.png"
-            renderPM.drawToFile(drawing, str(temp_png), fmt="PNG")
-
-            # Convert PNG to JPEG using Pillow
-            with Image.open(temp_png) as img:
+            # Use PIL to convert SVG to PNG
+            with Image.open(temp_svg) as img:
+                # Convert to RGB for JPEG
                 img = img.convert('RGB')
                 filepath = IMAGES_DIR / filename
-                img.save(filepath, 'JPEG', quality=90)
+                print(f"Saving JPEG to: {filepath}")
+                img.save(filepath, 'JPEG', quality=95)
 
-            # Clean up temporary files
+            # Clean up temporary file
             temp_svg.unlink(missing_ok=True)
-            temp_png.unlink(missing_ok=True)
 
             web_path = f"images/{filename}"
 
@@ -121,7 +109,6 @@ async def run(state, memory):
             print(f"Error saving image: {str(e)}")
             return "Pippin tried to save his drawing but got his hooves tangled."
 
-        # Store the result
         result = {
             'original_memory': selected_memory,
             'scene_info': scene_info,
