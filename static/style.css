@@ -85,6 +85,40 @@ h1, h2 {
     color: #4a90e2;
 }
 
+#summary-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+#summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+#summary-table th, #summary-table td {
+    border: 1px solid #eee;
+    padding: 12px;
+}
+
+#summary-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-align: left;
+    color: #555;
+}
+
+#summary-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+#summary-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+
 #history-section {
     background-color: #ffffff;
     padding: 20px;
@@ -181,3 +215,4 @@ h1, h2 {
 .highlight {
     animation: highlight 1s ease-out;
 }
+

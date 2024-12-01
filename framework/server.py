@@ -5,8 +5,12 @@ from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
-import shared_data
 from threading import Thread
+import json
+import datetime
+
+import shared_data
+from framework.memory import Memory  # Ensure correct import path for Memory
 
 app = FastAPI()
 
@@ -17,7 +21,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/")
 async def get():
     return HTMLResponse(open("templates/index.html").read())
-
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -46,15 +49,42 @@ async def websocket_endpoint(websocket: WebSocket):
                     'state_changes': state_changes
                 })
 
+        # Calculate the 24-hour summary
+        summary_data = await get_24_hour_summary(memory)
+
         # Prepare data to send
         data = {
             'current_activity': shared_data.current_activity,
             'state': shared_data.state.to_dict(),
-            'activity_history': activity_history
+            'activity_history': activity_history,
+            'summary_data': summary_data  # Include summary in the data
         }
         await websocket.send_json(data)
         await asyncio.sleep(1)
-        await asyncio.sleep(1)
+
+async def get_24_hour_summary(memory):
+    """Get summary of activity counts and durations for the past 24 hours."""
+    now = datetime.datetime.now()
+    since = now - datetime.timedelta(hours=24)
+
+    async with memory.get_db_connection() as db:
+        cursor = await db.execute('''
+            SELECT activity, COUNT(*) as count, SUM(duration) as total_duration
+            FROM activity_logs
+            WHERE timestamp >= ?
+            GROUP BY activity
+        ''', (since.isoformat(),))
+        rows = await cursor.fetchall()
+
+    summary = []
+    for row in rows:
+        activity, count, total_duration = row
+        summary.append({
+            'activity': activity,
+            'count': count,
+            'total_duration': total_duration or 0
+        })
+    return summary
 
 def run_server():
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -8,8 +8,7 @@ import asyncio
 import contextvars
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-# Make sure to import OpenAI's API correctly
-import openai
+from openai import AsyncOpenAI
 
 # Context variable for current activity_id
 current_activity_id = contextvars.ContextVar('current_activity_id', default=None)
@@ -17,8 +16,8 @@ current_activity_id = contextvars.ContextVar('current_activity_id', default=None
 class Memory:
     def __init__(self, db_name='memory.db'):
         self.db_name = db_name
-        openai.api_key = os.getenv('OPENAI_API_KEY')
-        if not openai.api_key:
+        self.client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        if not self.client.api_key:
             print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
 
     def get_db_connection(self):
@@ -130,15 +129,16 @@ class Memory:
 
     async def compute_embedding(self, text):
         """Compute embedding using the OpenAI API"""
-        if not openai.api_key:
+        if not self.client.api_key:
             return None
 
         try:
-            response = await openai.Embedding.acreate(
+            response = await self.client.embeddings.create(
                 model="text-embedding-ada-002",
-                input=text
+                input=text,
+                encoding_format="float"
             )
-            return response['data'][0]['embedding']
+            return response.data[0].embedding
         except Exception as e:
             print(f"Error computing embedding: {e}")
             return None
@@ -182,6 +182,7 @@ class Memory:
         return top_memories
 
     async def get_last_activity_time(self, activity_name):
+        """Get the timestamp of the last occurrence of the specified activity."""
         async with self.get_db_connection() as db:
             cursor = await db.execute('''
                 SELECT timestamp FROM activity_logs
@@ -198,6 +199,7 @@ class Memory:
                 return None
 
     async def count_activity_occurrences(self, activity_name, since):
+        """Count how many times the activity has occurred since a given time."""
         async with self.get_db_connection() as db:
             cursor = await db.execute('''
                 SELECT COUNT(*) FROM activity_logs
@@ -210,5 +212,6 @@ class Memory:
                 return 0
 
     async def has_activity_occurred(self, activity_name, since):
+        """Check if the activity has occurred at least once since a given time."""
         count = await self.count_activity_occurrences(activity_name, since)
         return count > 0
