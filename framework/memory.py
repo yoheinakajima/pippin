@@ -8,7 +8,8 @@ import asyncio
 import contextvars
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from openai import AsyncOpenAI
+# Make sure to import OpenAI's API correctly
+import openai
 
 # Context variable for current activity_id
 current_activity_id = contextvars.ContextVar('current_activity_id', default=None)
@@ -16,15 +17,15 @@ current_activity_id = contextvars.ContextVar('current_activity_id', default=None
 class Memory:
     def __init__(self, db_name='memory.db'):
         self.db_name = db_name
-        self.client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-        if not self.client.api_key:
+        openai.api_key = os.getenv('OPENAI_API_KEY')
+        if not openai.api_key:
             print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
 
     def get_db_connection(self):
         return aiosqlite.connect(self.db_name)
 
     async def initialize(self):
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 CREATE TABLE IF NOT EXISTS activity_logs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,7 +65,7 @@ class Memory:
         embedding = await self.compute_embedding(result_text)
         embedding_blob = pickle.dumps(embedding)
 
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 INSERT INTO activity_logs (
                     activity_id, timestamp, activity, result, start_time, end_time, duration,
@@ -95,7 +96,7 @@ class Memory:
         # Get current activity_id from context
         activity_id = current_activity_id.get()
 
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 INSERT INTO activity_logs (
                     activity_id, timestamp, activity, result, embedding, source, parent_id
@@ -115,7 +116,7 @@ class Memory:
     async def store_state_snapshot(self, state):
         """Store a snapshot of the current state."""
         timestamp = datetime.datetime.now().isoformat()
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 INSERT INTO state_snapshots (timestamp, energy, happiness, xp)
                 VALUES (?, ?, ?, ?)
@@ -129,16 +130,15 @@ class Memory:
 
     async def compute_embedding(self, text):
         """Compute embedding using the OpenAI API"""
-        if not self.client.api_key:
+        if not openai.api_key:
             return None
 
         try:
-            response = await self.client.embeddings.create(
+            response = await openai.Embedding.acreate(
                 model="text-embedding-ada-002",
-                input=text,
-                encoding_format="float"
+                input=text
             )
-            return response.data[0].embedding
+            return response['data'][0]['embedding']
         except Exception as e:
             print(f"Error computing embedding: {e}")
             return None
@@ -150,7 +150,7 @@ class Memory:
             return []
 
         # Fetch embeddings from the database with optional filters
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             sql = 'SELECT id, activity, result, embedding, source FROM activity_logs WHERE embedding IS NOT NULL'
             params = []
             if activity_type:
@@ -180,3 +180,35 @@ class Memory:
         similarities.sort(key=lambda x: x[0], reverse=True)
         top_memories = [item[1] for item in similarities[:top_n]]
         return top_memories
+
+    async def get_last_activity_time(self, activity_name):
+        async with self.get_db_connection() as db:
+            cursor = await db.execute('''
+                SELECT timestamp FROM activity_logs
+                WHERE activity = ?
+                ORDER BY id DESC
+                LIMIT 1
+            ''', (activity_name,))
+            row = await cursor.fetchone()
+            if row:
+                timestamp_str = row[0]
+                timestamp = datetime.datetime.fromisoformat(timestamp_str)
+                return timestamp
+            else:
+                return None
+
+    async def count_activity_occurrences(self, activity_name, since):
+        async with self.get_db_connection() as db:
+            cursor = await db.execute('''
+                SELECT COUNT(*) FROM activity_logs
+                WHERE activity = ? AND timestamp >= ?
+            ''', (activity_name, since.isoformat()))
+            row = await cursor.fetchone()
+            if row:
+                return row[0]
+            else:
+                return 0
+
+    async def has_activity_occurred(self, activity_name, since):
+        count = await self.count_activity_occurrences(activity_name, since)
+        return count > 0

@@ -22,7 +22,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def get():
     return HTMLResponse(open(os.path.join("templates", "index.html")).read())
 
-
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -57,7 +56,6 @@ async def websocket_endpoint(websocket: WebSocket):
         }
         await websocket.send_json(data)
         await asyncio.sleep(1)
-        
 
 async def run_server():
     config = uvicorn.Config(app=app, host="0.0.0.0", port=8000, log_level="info", lifespan="off")
@@ -74,7 +72,7 @@ async def main_loop():
     asyncio.create_task(snapshot_state(shared_data.state, memory, interval=60))
 
     while True:
-        activity_name = select_activity(shared_data.state, activity_functions)
+        activity_name = await select_activity(shared_data.state, activity_functions, memory)
         activity_func = activity_functions[activity_name]
 
         # Set current activity with start time
