@@ -28,7 +28,14 @@ function updateDashboard(data) {
     updateStats(data.state);
 
     // Update activity history
+    console.log("activity history");
+    console.log("data.activity_history");
+    updateSummaryTable(data.summary_data);
     updateHistoryTable(data.activity_history);
+
+   // Update 24-hour summary
+    console.log("summary table");
+    console.log("data.summary_data");
 }
 
 function updateCurrentActivity(activity) {
@@ -79,6 +86,28 @@ function updateStatWithAnimation(elementId, newValue) {
         void element.offsetWidth; // Trigger reflow
         element.classList.add('highlight');
     }
+}
+
+function updateSummaryTable(summary) {
+    console.log("updateSummaryTable")
+    var summaryBody = document.getElementById("summary-body");
+    summaryBody.innerHTML = '';
+
+    summary.forEach(function(item) {
+        var row = document.createElement('tr');
+
+        // Format total duration
+        var totalDuration = formatDuration(item.total_duration);
+
+        // Create table cells
+        row.innerHTML = `
+            <td>${capitalizeFirstLetter(item.activity)}</td>
+            <td>${item.count}</td>
+            <td>${totalDuration}</td>
+        `;
+
+        summaryBody.appendChild(row);
+    });
 }
 
 function updateHistoryTable(history) {

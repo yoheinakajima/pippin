@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background Sky -->
+  <rect width="800" height="600" fill="#87CEEB" />
+
+  <!-- Stormy Clouds -->
+  <ellipse cx="200" cy="100" rx="100" ry="60" fill="#B0C4DE" />
+  <ellipse cx="400" cy="80" rx="120" ry="70" fill="#B0C4DE" />
+  <ellipse cx="600" cy="120" rx="100" ry="60" fill="#B0C4DE" />
+
+  <!-- Lightning -->
+  <polygon points="350,150 360,180 340,180" fill="#FFFF00" />
+  <polygon points="500,200 510,230 490,230" fill="#FFFF00" />
+
+  <!-- Crumbling Tower -->
+  <rect x="300" y="300" width="200" height="250" fill="#8B4513" />
+  <rect x="320" y="260" width="160" height="40" fill="#A0522D" />
+  <!-- Tower Cracks -->
+  <line x1="300" y1="350" x2="500" y2="360" stroke="#654321" stroke-width="2"/>
+  <line x1="350" y1="400" x2="450" y2="410" stroke="#654321" stroke-width="2"/>
+
+  <!-- Knight -->
+  <circle cx="350" cy="300" r="20" fill="#FFD700" /> <!-- Helmet -->
+  <rect x="340" y="320" width="20" height="50" fill="#C0C0C0" /> <!-- Body -->
+  <rect x="330" y="320" width="10" height="40" fill="#C0C0C0" /> <!-- Left Arm -->
+  <rect x="360" y="320" width="10" height="40" fill="#C0C0C0" /> <!-- Right Arm -->
+  <rect x="340" y="370" width="7" height="30" fill="#0000FF" /> <!-- Left Leg -->
+  <rect x="353" y="370" width="7" height="30" fill="#0000FF" /> <!-- Right Leg -->
+  <!-- Sword -->
+  <rect x="360" y="300" width="4" height="40" fill="#FFFF00" />
+  <polygon points="362,300 358,300 360,290" fill="#808080" />
+
+  <!-- Dragon -->
+  <circle cx="450" cy="250" r="30" fill="#FF4500" /> <!-- Head -->
+  <ellipse cx="450" cy="290" rx="40" ry="20" fill="#FF6347" /> <!-- Body -->
+  <polygon points="420,260 410,270 420,270" fill="#FF4500" /> <!-- Left Wing -->
+  <polygon points="480,260 490,270 480,270" fill="#FF4500" /> <!-- Right Wing -->
+  <circle cx="440" cy="240" r="5" fill="#000000" /> <!-- Left Eye -->
+  <circle cx="460" cy="240" r="5" fill="#000000" /> <!-- Right Eye -->
+  <!-- Dragon Tail -->
+  <path d="M490,290 Q510,300 500,320" stroke="#FF4500" stroke-width="5" fill="none" />
+</svg>

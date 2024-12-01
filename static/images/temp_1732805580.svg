@@ -1,0 +1,68 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Sky with Gradient -->
+  <defs>
+    <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF9AA2"/>
+      <stop offset="50%" stop-color="#FFB7B2"/>
+      <stop offset="100%" stop-color="#FFDAC1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#sunset)" />
+
+  <!-- Light Clouds -->
+  <g opacity="0.8">
+    <ellipse cx="150" cy="100" rx="60" ry="30" fill="#FFFFFF" />
+    <ellipse cx="200" cy="120" rx="50" ry="25" fill="#FFFFFF" />
+    <ellipse cx="650" cy="80" rx="40" ry="20" fill="#FFFFFF" />
+    <ellipse cx="700" cy="100" rx="50" ry="25" fill="#FFFFFF" />
+  </g>
+
+  <!-- Lavender Fields -->
+  <g id="fields">
+    <!-- Lavender Patch -->
+    <rect x="50" y="400" width="100" height="50" fill="#B497BD" />
+    <rect x="160" y="400" width="100" height="50" fill="#B497BD" />
+    <rect x="270" y="400" width="100" height="50" fill="#B497BD" />
+    <rect x="380" y="400" width="100" height="50" fill="#B497BD" />
+    <rect x="490" y="400" width="100" height="50" fill="#B497BD" />
+    <rect x="600" y="400" width="100" height="50" fill="#B497BD" />
+
+    <!-- Green Fields -->
+    <rect x="50" y="450" width="100" height="50" fill="#77DD77" />
+    <rect x="270" y="450" width="100" height="50" fill="#77DD77" />
+    <rect x="490" y="450" width="100" height="50" fill="#77DD77" />
+
+    <!-- Yellow Fields -->
+    <rect x="160" y="450" width="100" height="50" fill="#FDFD96" />
+    <rect x="380" y="450" width="100" height="50" fill="#FDFD96" />
+    <rect x="600" y="450" width="100" height="50" fill="#FDFD96" />
+  </g>
+
+  <!-- Parachute -->
+  <g id="parachute">
+    <path d="M400 200 
+             C350 250, 450 250, 400 200" fill="#FF6F61" stroke="#E63946" stroke-width="2"/>
+    <path d="M400 200 
+             C360 220, 440 220, 400 200" fill="#FFB7B2" stroke="#E63946" stroke-width="1.5"/>
+    <line x1="400" y1="200" x2="380" y2="250" stroke="#555" stroke-width="2"/>
+    <line x1="400" y1="200" x2="420" y2="250" stroke="#555" stroke-width="2"/>
+  </g>
+
+  <!-- Skydiver -->
+  <g id="skydiver" transform="translate(400,250)">
+    <!-- Body -->
+    <circle cx="0" cy="0" r="10" fill="#FFD700" stroke="#DAA520" stroke-width="2"/>
+    <!-- Arms -->
+    <line x1="0" y1="0" x2="-15" y2="15" stroke="#FFD700" stroke-width="2"/>
+    <line x1="0" y1="0" x2="15" y2="15" stroke="#FFD700" stroke-width="2"/>
+    <!-- Legs -->
+    <line x1="0" y1="0" x2="-10" y2="20" stroke="#FFD700" stroke-width="2"/>
+    <line x1="0" y1="0" x2="10" y2="20" stroke="#FFD700" stroke-width="2"/>
+  </g>
+
+  <!-- Sun -->
+  <circle cx="700" cy="100" r="40" fill="#FFD166" />
+
+  <!-- Ground -->
+  <rect y="500" width="800" height="100" fill="#6A994E" />
+</svg>

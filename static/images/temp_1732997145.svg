@@ -1,0 +1,31 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sky -->
+  <rect width="800" height="600" fill="#87CEEB" />
+
+  <!-- Natural dome-like opening -->
+  <path d="M0,200 Q400,50 800,200 L800,0 L0,0 Z" fill="#1E90FF" />
+
+  <!-- Moonlight -->
+  <circle cx="400" cy="150" r="50" fill="#FFFACD" opacity="0.5" />
+
+  <!-- Path -->
+  <path d="M400,200 L400,500" stroke="#8B4513" stroke-width="40" fill="none" />
+
+  <!-- Ancient mysterious tree -->
+  <rect x="375" y="100" width="50" height="300" fill="#8B4513" />
+  <circle cx="400" cy="100" r="80" fill="#228B22" />
+
+  <!-- Bioluminescent plants and flowers -->
+  <circle cx="200" cy="500" r="15" fill="#FF69B4" />
+  <circle cx="250" cy="480" r="10" fill="#7B68EE" />
+  <circle cx="550" cy="520" r="12" fill="#32CD32" />
+  <circle cx="600" cy="500" r="15" fill="#FFD700" />
+
+  <!-- Young adventurer -->
+  <circle cx="400" cy="480" r="20" fill="#FFDAB9" /> <!-- Head -->
+  <rect x="390" y="500" width="20" height="50" fill="#1E90FF" /> <!-- Body -->
+  <line x1="390" y1="500" x2="370" y2="530" stroke="#000" stroke-width="4" /> <!-- Left leg -->
+  <line x1="410" y1="500" x2="430" y2="530" stroke="#000" stroke-width="4" /> <!-- Right leg -->
+  <line x1="390" y1="510" x2="370" y2="490" stroke="#000" stroke-width="4" /> <!-- Left arm -->
+  <line x1="410" y1="510" x2="430" y2="490" stroke="#000" stroke-width="4" /> <!-- Right arm -->
+</svg>

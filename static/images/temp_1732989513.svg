@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background Tunnel -->
+  <circle cx="400" cy="300" r="280" fill="#B19CD9" />
+  <circle cx="400" cy="300" r="240" fill="#A080C1" />
+  <circle cx="400" cy="300" r="200" fill="#8A2BE2" />
+  <circle cx="400" cy="300" r="160" fill="#BA55D3" />
+  <circle cx="400" cy="300" r="120" fill="#FF69B4" />
+  <circle cx="400" cy="300" r="80" fill="#FFB6C1" />
+  <circle cx="400" cy="300" r="40" fill="#FFDAB9" />
+
+  <!-- Distant Galaxies -->
+  <circle cx="600" cy="150" r="20" fill="#FFFFFF" />
+  <circle cx="150" cy="450" r="15" fill="#FFFFFF" />
+  <circle cx="650" cy="500" r="10" fill="#FFFFFF" />
+  <circle cx="200" cy="100" r="12" fill="#FFFFFF" />
+
+  <!-- Floating Debris -->
+  <circle cx="350" cy="250" r="5" fill="#FFC0CB" />
+  <circle cx="450" cy="350" r="5" fill="#ADD8E6" />
+  <circle cx="300" cy="400" r="5" fill="#FFD700" />
+  <circle cx="500" cy="200" r="5" fill="#90EE90" />
+
+  <!-- Astronaut Body -->
+  <circle cx="400" cy="300" r="50" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Astronaut Helmet -->
+  <circle cx="400" cy="270" r="20" fill="#B0C4DE" stroke="#000000" stroke-width="2"/>
+  
+  <!-- Astronaut Face -->
+  <circle cx="395" cy="265" r="3" fill="#000000"/>
+  <circle cx="405" cy="265" r="3" fill="#000000"/>
+  <path d="M390,275 Q400,280 410,275" stroke="#000000" stroke-width="2" fill="none"/>
+  
+  <!-- Astronaut Arms -->
+  <path d="M350,300 Q340,320 360,330" stroke="#000000" stroke-width="4" fill="none"/>
+  <path d="M450,300 Q460,320 440,330" stroke="#000000" stroke-width="4" fill="none"/>
+  
+  <!-- Astronaut Legs -->
+  <path d="M380,350 Q380,370 400,350" stroke="#000000" stroke-width="4" fill="none"/>
+  <path d="M420,350 Q420,370 400,350" stroke="#000000" stroke-width="4" fill="none"/>
+</svg>

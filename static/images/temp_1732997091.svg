@@ -1,0 +1,89 @@
+<svg
+    width="800"
+    height="600"
+    viewBox="0 0 800 600"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <!-- Background -->
+    <rect width="800" height="600" fill="#2c3e50" />
+
+    <!-- Arena Platform -->
+    <rect x="200" y="400" width="400" height="20" fill="#34495e" />
+
+    <!-- Victorious Robot -->
+    <g id="victorious-robot">
+        <!-- Body -->
+        <rect x="370" y="350" width="60" height="100" fill="#1abc9c" stroke="#16a085" stroke-width="2"/>
+        <!-- Head -->
+        <rect x="390" y="320" width="20" height="30" fill="#16a085" stroke="#149174" stroke-width="2"/>
+        <!-- Arm Raised -->
+        <rect x="430" y="350" width="10" height="50" fill="#1abc9c" stroke="#16a085" stroke-width="2" transform="rotate(-45 430 350)" />
+        <!-- Legs -->
+        <rect x="370" y="450" width="25" height="50" fill="#1abc9c" stroke="#16a085" stroke-width="2"/>
+        <rect x="405" y="450" width="25" height="50" fill="#1abc9c" stroke="#16a085" stroke-width="2"/>
+    </g>
+
+    <!-- Defeated Robot -->
+    <g id="defeated-robot">
+        <!-- Body -->
+        <rect x="270" y="420" width="60" height="80" fill="#e74c3c" stroke="#c0392b" stroke-width="2" />
+        <!-- Head -->
+        <rect x="290" y="390" width="20" height="30" fill="#c0392b" stroke="#a93226" stroke-width="2"/>
+        <!-- Arm Down -->
+        <rect x="270" y="420" width="10" height="50" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+        <!-- Smoking Effect -->
+        <ellipse x="300" y="385" rx="5" ry="3" fill="#bdc3c7" />
+    </g>
+
+    <!-- Sparks and Molten Metal -->
+    <circle cx="330" cy="400" r="3" fill="#f1c40f" />
+    <circle cx="340" cy="390" r="3" fill="#f39c12" />
+    <circle cx="360" cy="410" r="3" fill="#e67e22" />
+    <circle cx="390" cy="405" r="3" fill="#f1c40f" />
+    <circle cx="420" cy="395" r="3" fill="#f39c12" />
+
+    <!-- Crowd -->
+    <g id="crowd">
+        <!-- Person 1 -->
+        <circle cx="150" cy="500" r="10" fill="#ecf0f1" />
+        <rect x="145" y="510" width="10" height="20" fill="#95a5a6" />
+        <!-- Person 2 -->
+        <circle cx="180" cy="500" r="10" fill="#ecf0f1" />
+        <rect x="175" y="510" width="10" height="20" fill="#95a5a6" />
+        <!-- Person 3 -->
+        <circle cx="210" cy="500" r="10" fill="#ecf0f1" />
+        <rect x="205" y="510" width="10" height="20" fill="#95a5a6" />
+        <!-- Person 4 -->
+        <circle cx="240" cy="500" r="10" fill="#ecf0f1" />
+        <rect x="235" y="510" width="10" height="20" fill="#95a5a6" />
+        <!-- Person 5 -->
+        <circle cx="270" cy="500" r="10" fill="#ecf0f1" />
+        <rect x="265" y="510" width="10" height="20" fill="#95a5a6" />
+    </g>
+
+    <!-- Wires -->
+    <line x1="100" y1="100" x2="700" y2="100" stroke="#7f8c8d" stroke-width="2" />
+    <line x1="120" y1="120" x2="680" y2="120" stroke="#7f8c8d" stroke-width="2" />
+    <line x1="140" y1="140" x2="660" y2="140" stroke="#7f8c8d" stroke-width="2" />
+
+    <!-- Dim Lights -->
+    <circle cx="150" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="200" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="250" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="300" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="350" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="400" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="450" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="500" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="550" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="600" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="650" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="700" cy="80" r="10" fill="#95a5a6" />
+    <circle cx="750" cy="80" r="10" fill="#95a5a6" />
+
+    <!-- Ground Details -->
+    <rect x="200" y="420" width="400" height="10" fill="#34495e" />
+    <rect x="200" y="430" width="400" height="10" fill="#2c3e50" />
+
+</svg>

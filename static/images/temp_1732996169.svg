@@ -1,0 +1,52 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Sky -->
+  <rect width="800" height="300" y="0" fill="#6A5ACD"/> <!-- Twilight Blue -->
+  <rect width="800" height="300" y="300" fill="#000000"/> <!-- Night Black -->
+
+  <!-- Stars -->
+  <circle cx="100" cy="100" r="2" fill="#FFFFFF"/>
+  <circle cx="200" cy="80" r="2" fill="#FFFFFF"/>
+  <circle cx="300" cy="120" r="2" fill="#FFFFFF"/>
+  <circle cx="400" cy="60" r="2" fill="#FFFFFF"/>
+  <circle cx="500" cy="100" r="2" fill="#FFFFFF"/>
+  <circle cx="600" cy="80" r="2" fill="#FFFFFF"/>
+  <circle cx="700" cy="130" r="2" fill="#FFFFFF"/>
+
+  <!-- Constellation Lines -->
+  <line x1="100" y1="100" x2="200" y2="80" stroke="#FFFFFF" stroke-width="1"/>
+  <line x1="200" y1="80" x2="300" y2="120" stroke="#FFFFFF" stroke-width="1"/>
+  <line x1="300" y1="120" x2="400" y2="60" stroke="#FFFFFF" stroke-width="1"/>
+  <line x1="400" y1="60" x2="500" y2="100" stroke="#FFFFFF" stroke-width="1"/>
+  <line x1="500" y1="100" x2="600" y2="80" stroke="#FFFFFF" stroke-width="1"/>
+  <line x1="600" y1="80" x2="700" y2="130" stroke="#FFFFFF" stroke-width="1"/>
+
+  <!-- Cliff -->
+  <polygon points="100,300 400,300 250,150" fill="#8B4513"/>
+
+  <!-- Adventurer -->
+  <circle cx="250" cy="120" r="15" fill="#FFD700"/> <!-- Head -->
+  <rect x="240" y="135" width="20" height="50" fill="#4682B4"/> <!-- Body -->
+  <rect x="230" y="135" width="10" height="40" fill="#B0C4DE"/> <!-- Left Arm -->
+  <rect x="260" y="135" width="10" height="40" fill="#B0C4DE"/> <!-- Right Arm -->
+  <rect x="240" y="185" width="5" height="30" fill="#696969"/> <!-- Left Leg -->
+  <rect x="255" y="185" width="5" height="30" fill="#696969"/> <!-- Right Leg -->
+
+  <!-- Glowing Artifact -->
+  <circle cx="275" cy="100" r="10" fill="#FFFF00" stroke="#FFD700" stroke-width="2"/>
+  <line x1="275" y1="100" x2="275" y2="70" stroke="#FFD700" stroke-width="2"/>
+
+  <!-- Mystical City -->
+  <g transform="translate(50, 300)">
+    <!-- Buildings -->
+    <rect x="50" y="200" width="40" height="100" fill="#2E8B57"/>
+    <rect x="110" y="220" width="30" height="80" fill="#3CB371"/>
+    <rect x="160" y="180" width="50" height="120" fill="#228B22"/>
+    <rect x="230" y="210" width="35" height="90" fill="#32CD32"/>
+    <rect x="280" y="190" width="45" height="110" fill="#006400"/>
+    <rect x="340" y="200" width="40" height="100" fill="#2E8B57"/>
+    <rect x="400" y="220" width="30" height="80" fill="#3CB371"/>
+    <rect x="450" y="180" width="50" height="120" fill="#228B22"/>
+    <rect x="520" y="210" width="35" height="90" fill="#32CD32"/>
+    <rect x="570" y="190" width="45" height="110" fill="#006400"/>
+  </g>
+</svg>

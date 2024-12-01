@@ -27,7 +27,7 @@ class Memory:
         return aiosqlite.connect(self.db_name)
 
     async def initialize(self):
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 CREATE TABLE IF NOT EXISTS activity_logs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +67,7 @@ class Memory:
         embedding = await self.compute_embedding(result_text)
         embedding_blob = pickle.dumps(embedding)
 
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 INSERT INTO activity_logs (
                     activity_id, timestamp, activity, result, start_time, end_time, duration,
@@ -98,7 +98,7 @@ class Memory:
         # Get current activity_id from context
         activity_id = current_activity_id.get()
 
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 INSERT INTO activity_logs (
                     activity_id, timestamp, activity, result, embedding, source, parent_id
@@ -118,7 +118,7 @@ class Memory:
     async def store_state_snapshot(self, state):
         """Store a snapshot of the current state."""
         timestamp = datetime.datetime.now().isoformat()
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             await db.execute('''
                 INSERT INTO state_snapshots (timestamp, energy, happiness, xp)
                 VALUES (?, ?, ?, ?)
@@ -153,7 +153,7 @@ class Memory:
             return []
 
         # Fetch embeddings from the database with optional filters
-        async with aiosqlite.connect(self.db_name) as db:
+        async with self.get_db_connection() as db:
             sql = 'SELECT id, activity, result, embedding, source FROM activity_logs WHERE embedding IS NOT NULL'
             params = []
             if activity_type:
@@ -183,3 +183,38 @@ class Memory:
         similarities.sort(key=lambda x: x[0], reverse=True)
         top_memories = [item[1] for item in similarities[:top_n]]
         return top_memories
+
+    async def get_last_activity_time(self, activity_name):
+        """Get the timestamp of the last occurrence of the specified activity."""
+        async with self.get_db_connection() as db:
+            cursor = await db.execute('''
+                SELECT timestamp FROM activity_logs
+                WHERE activity = ?
+                ORDER BY id DESC
+                LIMIT 1
+            ''', (activity_name,))
+            row = await cursor.fetchone()
+            if row:
+                timestamp_str = row[0]
+                timestamp = datetime.datetime.fromisoformat(timestamp_str)
+                return timestamp
+            else:
+                return None
+
+    async def count_activity_occurrences(self, activity_name, since):
+        """Count how many times the activity has occurred since a given time."""
+        async with self.get_db_connection() as db:
+            cursor = await db.execute('''
+                SELECT COUNT(*) FROM activity_logs
+                WHERE activity = ? AND timestamp >= ?
+            ''', (activity_name, since.isoformat()))
+            row = await cursor.fetchone()
+            if row:
+                return row[0]
+            else:
+                return 0
+
+    async def has_activity_occurred(self, activity_name, since):
+        """Check if the activity has occurred at least once since a given time."""
+        count = await self.count_activity_occurrences(activity_name, since)
+        return count > 0
