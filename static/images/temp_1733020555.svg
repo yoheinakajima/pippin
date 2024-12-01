@@ -1,0 +1,55 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f0f8ff"/>
+  
+  <!-- Ceiling -->
+  <path d="M0,100 Q400,0 800,100 L800,150 Q400,50 0,150 Z" fill="#e6e6fa" stroke="#dcdcdc" stroke-width="2"/>
+  
+  <!-- Bookshelves -->
+  <g id="bookshelves">
+    <!-- Left bookshelves -->
+    <rect x="50" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="80" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="110" y="150" width="20" height="450" fill="#cd853f"/>
+    <!-- Right bookshelves -->
+    <rect x="730" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="700" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="670" y="150" width="20" height="450" fill="#cd853f"/>
+    <!-- Middle bookshelves -->
+    <rect x="200" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="230" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="260" y="150" width="20" height="450" fill="#cd853f"/>
+    <rect x="290" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="320" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="350" y="150" width="20" height="450" fill="#cd853f"/>
+    <rect x="380" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="410" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="440" y="150" width="20" height="450" fill="#cd853f"/>
+    <rect x="470" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="500" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="530" y="150" width="20" height="450" fill="#cd853f"/>
+    <rect x="560" y="150" width="20" height="450" fill="#8b4513"/>
+    <rect x="590" y="150" width="20" height="450" fill="#a0522d"/>
+    <rect x="620" y="150" width="20" height="450" fill="#cd853f"/>
+  </g>
+  
+  <!-- Solitary Figure -->
+  <g id="figure">
+    <circle cx="400" cy="400" r="20" fill="#ffcc99"/>
+    <rect x="390" y="420" width="20" height="50" fill="#4682b4"/>
+    <rect x="380" y="470" width="40" height="10" fill="#000" />
+    <rect x="390" y="420" width="5" height="30" fill="#000"/>
+    <rect x="405" y="420" width="5" height="30" fill="#000"/>
+  </g>
+  
+  <!-- Glowing Book -->
+  <g id="book">
+    <rect x="395" y="390" width="10" height="15" fill="#ffd700"/>
+    <circle cx="400" cy="397.5" r="7" fill="rgba(255, 215, 0, 0.5)"/>
+  </g>
+  
+  <!-- Ethereal Light -->
+  <g id="light">
+    <circle cx="400" cy="397.5" r="30" fill="rgba(255, 215, 0, 0.2)"/>
+  </g>
+</svg>

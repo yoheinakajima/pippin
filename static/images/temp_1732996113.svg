@@ -1,0 +1,58 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Cave -->
+  <rect width="800" height="600" fill="#2c3e50"/>
+  
+  <!-- Stalactites -->
+  <path d="M100,50 Q110,80 100,110" stroke="#34495e" stroke-width="4" fill="none"/>
+  <path d="M200,30 Q210,70 200,110" stroke="#34495e" stroke-width="4" fill="none"/>
+  <path d="M300,60 Q310,100 300,140" stroke="#34495e" stroke-width="4" fill="none"/>
+  <path d="M400,40 Q410,90 400,140" stroke="#34495e" stroke-width="4" fill="none"/>
+  
+  <!-- Mystical Crystals -->
+  <circle cx="150" cy="500" r="20" fill="#8e44ad"/>
+  <circle cx="650" cy="480" r="15" fill="#e74c3c"/>
+  <circle cx="500" cy="520" r="25" fill="#f1c40f"/>
+  
+  <!-- Ground -->
+  <rect y="550" width="800" height="50" fill="#34495e"/>
+  
+  <!-- Luminous Crystal -->
+  <polygon points="400,300 420,350 400,400 380,350" fill="#f1c40f" stroke="#f39c12" stroke-width="3"/>
+  
+  <!-- Radiant Glow -->
+  <circle cx="400" cy="350" r="100" fill="none" stroke="#f1c40f" stroke-width="5"/>
+  
+  <!-- Scientist -->
+  <circle cx="350" cy="450" r="25" fill="#ecf0f1"/>
+  <rect x="335" y="475" width="30" height="50" fill="#7f8c8d"/>
+  <rect x="330" y="525" width="40" height="10" fill="#bdc3c7"/>
+  
+  <!-- Exploration Team -->
+  <!-- Team Member 1 -->
+  <circle cx="450" cy="450" r="20" fill="#ecf0f1"/>
+  <rect x="435" y="470" width="30" height="40" fill="#16a085"/>
+  <rect x="430" y="510" width="40" height="8" fill="#95a5a6"/>
+  
+  <!-- Team Member 2 -->
+  <circle cx="550" cy="450" r="20" fill="#ecf0f1"/>
+  <rect x="535" y="470" width="30" height="40" fill="#e67e22"/>
+  <rect x="530" y="510" width="40" height="8" fill="#95a5a6"/>
+  
+  <!-- Shadows -->
+  <ellipse cx="350" cy="530" rx="40" ry="10" fill="#34495e" opacity="0.5"/>
+  <ellipse cx="450" cy="530" rx="40" ry="10" fill="#34495e" opacity="0.5"/>
+  <ellipse cx="550" cy="530" rx="40" ry="10" fill="#34495e" opacity="0.5"/>
+  
+  <!-- Faces (Simple Eyes) -->
+  <!-- Scientist Eyes -->
+  <circle cx="340" cy="440" r="3" fill="#2c3e50"/>
+  <circle cx="360" cy="440" r="3" fill="#2c3e50"/>
+  
+  <!-- Team Member 1 Eyes -->
+  <circle cx="440" cy="440" r="2" fill="#2c3e50"/>
+  <circle cx="460" cy="440" r="2" fill="#2c3e50"/>
+  
+  <!-- Team Member 2 Eyes -->
+  <circle cx="540" cy="440" r="2" fill="#2c3e50"/>
+  <circle cx="560" cy="440" r="2" fill="#2c3e50"/>
+</svg>

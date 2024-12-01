@@ -2,7 +2,11 @@ import random
 
 IGNORED_ACTIVITIES = [
     'template_activity',
-    'memory_summary'
+    'memory_summary',
+    #'take_a_walk',
+    #'nap',
+    #'draw',
+    #'play'
 ]
 
 def select_activity(state, activity_functions, additional_ignored_activities=None):

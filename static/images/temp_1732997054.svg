@@ -1,0 +1,46 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sky -->
+  <rect width="800" height="600" fill="#ff9a76"/>
+  <rect y="400" width="800" height="200" fill="#ff6f91"/>
+  <rect y="500" width="800" height="100" fill="#8a2be2"/>
+  
+  <!-- Sun -->
+  <circle cx="700" cy="500" r="50" fill="#fff176"/>
+
+  <!-- Mountains -->
+  <polygon points="100,400 300,200 500,400" fill="#6d4c41"/>
+  <polygon points="400,400 600,150 800,400" fill="#8d6e63"/>
+
+  <!-- Forest -->
+  <g>
+    <polygon points="50,400 70,350 90,400" fill="#388e3c"/>
+    <polygon points="120,400 140,330 160,400" fill="#2e7d32"/>
+    <polygon points="190,400 210,360 230,400" fill="#43a047"/>
+    <polygon points="260,400 280,340 300,400" fill="#388e3c"/>
+    <polygon points="330,400 350,370 370,400" fill="#2e7d32"/>
+    <polygon points="400,400 420,350 440,400" fill="#43a047"/>
+    <polygon points="470,400 490,360 510,400" fill="#388e3c"/>
+    <polygon points="540,400 560,330 580,400" fill="#2e7d32"/>
+    <polygon points="610,400 630,340 650,400" fill="#43a047"/>
+  </g>
+
+  <!-- River -->
+  <path d="M0,500 Q200,450 400,500 T800,500 V600 H0 Z" fill="#64b5f6"/>
+
+  <!-- Cliff -->
+  <polygon points="400,500 420,400 600,400 580,500" fill="#8d6e63"/>
+
+  <!-- Hiker -->
+  <g>
+    <!-- Body -->
+    <rect x="530" y="370" width="10" height="30" fill="#000"/>
+    <!-- Legs -->
+    <line x1="530" y1="400" x2="525" y2="420" stroke="#000" stroke-width="2"/>
+    <line x1="540" y1="400" x2="545" y2="420" stroke="#000" stroke-width="2"/>
+    <!-- Arms -->
+    <line x1="530" y1="380" x2="520" y2="390" stroke="#000" stroke-width="2"/>
+    <line x1="540" y1="380" x2="550" y2="390" stroke="#000" stroke-width="2"/>
+    <!-- Head -->
+    <circle cx="535" cy="365" r="5" fill="#000"/>
+  </g>
+</svg>

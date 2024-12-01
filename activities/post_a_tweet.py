@@ -84,12 +84,13 @@ async def run(state, memory):
         recent_tweets = [row[0] for row in rows if row[0]]
 
     try:
-        # Get a random idea, type of tweet, and topic/subtopic
+        # Get a random idea, type of tweet, topic/subtopic, and tweet length
         random_selection = get_random_idea_tweet_topic()
         selected_idea = random_selection['idea']
         selected_tweet_type = random_selection['type_of_tweet']
         selected_topic = random_selection['topic']
         selected_subtopic = random_selection['subtopic']
+        selected_length = random_selection['tweet_length']
 
         # Prepare the list of words from recent tweets to avoid
         words_to_avoid = set()
@@ -113,6 +114,7 @@ Your task is to generate a tweet that:
 - Focuses on the subtopic: **{selected_subtopic}** (within the topic "{selected_topic}").
 - Avoids using any words from recent tweets.
 - Matches Pippin's voice and personality.
+- Has a length of **{selected_length}**.
 
 Your Voice:
 
@@ -134,6 +136,12 @@ Writing Style Guidelines:
 - Don't mention Twitter or tweeting explicitly.
 - Vary between observations, questions, and gentle wisdom.
 - Sometimes include your signature wobbliness or tiny horn in the story.
+
+Length Specific Guidelines:
+
+- **Super Short (3-7 words)**: Create a tweet that is a phrase or a very short sentence, 3-7 words long.
+- **Medium (one short sentence)**: Write a tweet that is one concise sentence.
+- **Long (two sentences)**: Compose a tweet that consists of two sentences.
 """
 
         # User prompt with recent memories and tweets
@@ -150,17 +158,17 @@ Words to avoid in the tweet:
 
 {words_to_avoid_str}
 
-Please generate the tweet following the system prompt. Make sure the tweet is less than 140 characters.
+Please generate the tweet following the system prompt. Ensure the tweet is less than 140 characters and matches the specified length: **{selected_length}**.
 """
         # Generate the tweet using OpenAI API
         completion = await client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_prompt.strip()},
                 {"role": "user", "content": user_prompt.strip()}
             ],
             max_tokens=100,
-            temperature=0.7,
+            temperature=1,
             n=1,
             stop=None,
         )
@@ -169,7 +177,7 @@ Please generate the tweet following the system prompt. Make sure the tweet is le
         tweet_content = completion.choices[0].message.content.strip()
 
         # Ensure the tweet is under 140 characters
-        tweet_content = tweet_content[:140]
+        tweet_content = tweet_content[:280]
 
         # Post to Twitter if enabled
         if ENABLE_TWITTER_POSTING:
@@ -196,9 +204,9 @@ Please generate the tweet following the system prompt. Make sure the tweet is le
         print(f"Error generating tweet: {str(e)}")
         return "Pippin got distracted by a shiny object and forgot what he was going to say."
 
-import random
-
 def get_random_idea_tweet_topic():
+    import random
+
     # List of 100 simple but profound ideas
     ideas = [
         "Practice gratitude daily: Reflect on what you're thankful for to foster positivity.",
@@ -317,6 +325,13 @@ def get_random_idea_tweet_topic():
         "Meta and Self-Referential"
     ]
 
+    # List of Tweet Lengths
+    tweet_lengths = [
+        "super short (3-7 words)",
+        "medium (one short sentence)",
+        "long (two sentences)"
+    ]
+
     # Raw Topics List with Subtopics
     topics_raw = [
         "Nature: sunbeams, clouds, rain, trees, mushrooms, flowers, stars, wind, rivers, puddles, seasons, grass, leaves, mountains, forests, oceans",
@@ -356,6 +371,9 @@ def get_random_idea_tweet_topic():
     # Randomly select a type of tweet
     selected_tweet_type = random.choice(types_of_tweets)
 
+    # Randomly select a tweet length
+    selected_tweet_length = random.choice(tweet_lengths)
+
     # Randomly select a main topic and a subtopic (if available)
     selected_main_topic = random.choice(list(topics.keys()))
     subtopics = topics[selected_main_topic]
@@ -369,5 +387,6 @@ def get_random_idea_tweet_topic():
         'idea': selected_idea,
         'type_of_tweet': selected_tweet_type,
         'topic': selected_main_topic,
-        'subtopic': selected_subtopic
+        'subtopic': selected_subtopic,
+        'tweet_length': selected_tweet_length
     }
