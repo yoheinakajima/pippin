@@ -18,6 +18,9 @@ dependencies = [
     "litellm>=1.53.1",
     "pillow>=11.0.0",
     "svglib>=1.5.1",
+    "requests-oauthlib>=2.0.0",
+    "uvicorn>=0.32.1",
+    "websockets>=14.1",
 ]
 
 [tool.setuptools]

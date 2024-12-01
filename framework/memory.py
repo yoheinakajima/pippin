@@ -18,7 +18,7 @@ class Memory:
         self.db_name = db_name
         self.client = AsyncOpenAI(
             api_key=os.getenv('OPENAI_API_KEY'),
-            base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")        
+            base_url=os.getenv("OPENAI_EMBEDDING_BASE_URL", "https://api.openai.com/v1")        
         )
         if not self.client.api_key:
             print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
