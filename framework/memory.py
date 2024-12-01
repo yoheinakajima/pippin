@@ -17,7 +17,7 @@ class Memory:
     def __init__(self, db_name='memory.db'):
         self.db_name = db_name
         self.client = AsyncOpenAI(
-            api_key=os.getenv('OPENAI_API_KEY'),
+            api_key=os.getenv('OPENAI_EMBEDDING_API_KEY'),
             base_url=os.getenv("OPENAI_EMBEDDING_BASE_URL", "https://api.openai.com/v1")        
         )
         if not self.client.api_key:
