@@ -159,7 +159,7 @@ async def run(state, memory):
         # Store memory
         await memory.store_memory(
             content=json.dumps(memory_content, indent=2),
-            activity='take_walk',
+            activity='take_a_walk',
             source='activity'
         )
 

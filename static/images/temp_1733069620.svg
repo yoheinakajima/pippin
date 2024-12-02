@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background Sky -->
+  <rect width="800" height="600" fill="#FFEDD5" />
+
+  <!-- Sun -->
+  <circle cx="700" cy="100" r="50" fill="#FFD700" />
+
+  <!-- Hot Air Balloon -->
+  <g id="balloon">
+    <!-- Balloon Patchwork -->
+    <path d="M400,300 
+             C380,280 420,280 400,300 
+             Z" fill="#FF6F61" />
+    <path d="M400,300 
+             C420,320 380,320 400,300 
+             Z" fill="#6B5B95" />
+    <path d="M400,300 
+             C430,310 370,310 400,300 
+             Z" fill="#88B04B" />
+    <!-- Add more patches as needed -->
+    <!-- Balloon Envelope Outline -->
+    <path d="M400,300 
+             C350,200 450,200 400,300 
+             Z" fill="none" stroke="#333" stroke-width="2"/>
+  </g>
+
+  <!-- Basket -->
+  <rect x="390" y="300" width="20" height="40" fill="#8B4513" stroke="#333" stroke-width="2"/>
+  <!-- Ropes -->
+  <line x1="400" y1="300" x2="380" y2="250" stroke="#333" stroke-width="2"/>
+  <line x1="400" y1="300" x2="420" y2="250" stroke="#333" stroke-width="2"/>
+
+  <!-- Adventurers -->
+  <g id="adventurers">
+    <!-- Adventurer 1 -->
+    <circle cx="390" cy="290" r="5" fill="#FFDAB9" />
+    <rect x="385" y="295" width="10" height="15" fill="#1E90FF" />
+    <!-- Adventurer 2 -->
+    <circle cx="410" cy="290" r="5" fill="#FFDAB9" />
+    <rect x="405" y="295" width="10" height="15" fill="#FF69B4" />
+    <!-- Adventurer 3 -->
+    <circle cx="400" cy="280" r="5" fill="#FFDAB9" />
+    <rect x="395" y="285" width="10" height="15" fill="#32CD32" />
+  </g>
+
+  <!-- Sunrise Rays -->
+  <line x1="700" y1="100" x2="700" y2="50" stroke="#FFD700" stroke-width="2"/>
+  <line x1="700" y1="100" x2="750" y2="100" stroke="#FFD700" stroke-width="2"/>
+  <line x1="700" y1="100" x2="650" y2="100" stroke="#FFD700" stroke-width="2"/>
+  <line x1="700" y1="100" x2="700" y2="150" stroke="#FFD700" stroke-width="2"/>
+
+  <!-- Landscape with Mist -->
+  <g id="landscape">
+    <!-- Ground -->
+    <rect y="400" width="800" height="200" fill="#98FB98" />
+    <!-- Village Roofs -->
+    <polygon points="200,400 220,380 240,400" fill="#B22222" />
+    <polygon points="250,400 270,380 290,400" fill="#B22222" />
+    <polygon points="300,400 320,380 340,400" fill="#B22222" />
+    <!-- More roofs can be added similarly -->
+    <!-- Morning Mist -->
+    <rect y="400" width="800" height="200" fill="rgba(255, 255, 255, 0.5)" />
+  </g>
+</svg>
