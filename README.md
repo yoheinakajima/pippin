@@ -210,4 +210,4 @@ Contributions are welcome! Please feel free to submit pull requests for new acti
 
 ## License
 
-BabyAGI is released under the MIT License.
+Pippin is released under the MIT License.
