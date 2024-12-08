@@ -9,7 +9,7 @@ IGNORED_ACTIVITIES = [
     # Uncomment activities you want to ignore
     #'take_a_walk',
     #'nap',
-    #'draw',
+    'draw',
     #'play',
     'post_a_tweet',
     #'post_a_tweet_with_image',  # Uncommented to treat the same as 'post_a_tweet'
