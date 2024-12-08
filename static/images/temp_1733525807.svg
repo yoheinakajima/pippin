@@ -1,0 +1,38 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Sky -->
+  <rect width="800" height="600" fill="#87CEEB"/>
+  
+  <!-- Tumultuous Clouds -->
+  <ellipse cx="200" cy="100" rx="100" ry="50" fill="#FFFFFF"/>
+  <ellipse cx="300" cy="150" rx="120" ry="60" fill="#FFFFFF"/>
+  <ellipse cx="500" cy="80" rx="90" ry="45" fill="#FFFFFF"/>
+  
+  <!-- Towering Rock Formation -->
+  <polygon points="400,500 350,300 450,300" fill="#654321"/>
+  <polygon points="400,500 300,350 500,350" fill="#5C3A21"/>
+  
+  <!-- Shadowy Creature -->
+  <ellipse cx="400" cy="500" rx="150" ry="50" fill="#2F2F2F"/>
+  <polygon points="250,500 400,200 550,500" fill="#2F2F2F" opacity="0.8"/>
+  
+  <!-- Swirling Vortex of Magic -->
+  <circle cx="400" cy="300" r="30" fill="#FFD700"/>
+  <circle cx="400" cy="300" r="50" fill="none" stroke="#FF4500" stroke-width="5"/>
+  <circle cx="400" cy="300" r="70" fill="none" stroke="#1E90FF" stroke-width="5"/>
+  <circle cx="400" cy="300" r="90" fill="none" stroke="#FFFF00" stroke-width="5"/>
+  
+  <!-- Young Magician -->
+  <circle cx="400" cy="250" r="20" fill="#FFDAB9"/>
+  <rect x="390" y="270" width="20" height="60" fill="#0000FF"/>
+  <line x1="400" y1="270" x2="400" y2="200" stroke="#8B4513" stroke-width="4"/>
+  
+  <!-- Lightning Bolts -->
+  <line x1="420" y1="280" x2="430" y2="260" stroke="#FFFF00" stroke-width="4"/>
+  <line x1="380" y1="280" x2="370" y2="260" stroke="#FFFF00" stroke-width="4"/>
+  
+  <!-- Fire Elements -->
+  <path d="M380,320 Q400,300 420,320" stroke="#FF4500" stroke-width="4" fill="none"/>
+  
+  <!-- Wind Elements -->
+  <path d="M350,350 Q400,330 450,350" stroke="#1E90FF" stroke-width="4" fill="none"/>
+</svg>

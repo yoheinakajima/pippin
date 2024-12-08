@@ -1,0 +1,55 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Midnight Blue Sky -->
+  <rect width="800" height="600" fill="#001d3d" />
+
+  <!-- Full Moon -->
+  <circle cx="700" cy="100" r="50" fill="#f0e130" />
+
+  <!-- Serpentine River -->
+  <path d="M0,400 Q200,350 400,400 T800,400 L800,600 L0,600 Z" fill="#003366" />
+
+  <!-- Reflective Moon on River -->
+  <ellipse cx="700" cy="400" rx="50" ry="10" fill="#f0e130" opacity="0.5" />
+
+  <!-- Ancient Willow Trees -->
+  <g fill="#2e8b57">
+    <!-- Left Willow -->
+    <path d="M200,400 Q190,350 200,300 Q210,350 200,400 Z" />
+    <path d="M220,400 Q210,350 220,300 Q230,350 220,400 Z" />
+    <!-- Right Willow -->
+    <path d="M600,400 Q590,350 600,300 Q610,350 600,400 Z" />
+    <path d="M620,400 Q610,350 620,300 Q630,350 620,400 Z" />
+  </g>
+
+  <!-- Protective Circle of Willows -->
+  <circle cx="400" cy="400" r="100" fill="none" stroke="#2e8b57" stroke-width="5" />
+
+  <!-- Translucent River Spirit -->
+  <ellipse cx="400" cy="400" rx="30" ry="50" fill="#a0c4ff" opacity="0.7" />
+  <path d="M370,400 Q400,350 430,400" stroke="#a0c4ff" stroke-width="5" fill="none" />
+
+  <!-- Flowing Robes -->
+  <path d="M380,400 Q400,420 420,400" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.5" />
+
+  <!-- Fireflies -->
+  <circle cx="350" cy="250" r="3" fill="#ffeb3b" />
+  <circle cx="450" cy="350" r="3" fill="#ffeb3b" />
+  <circle cx="500" cy="300" r="3" fill="#ffeb3b" />
+  <circle cx="300" cy="450" r="3" fill="#ffeb3b" />
+
+  <!-- Silhouette of Sleeping Village -->
+  <g fill="#2c3e50">
+    <!-- House 1 -->
+    <polygon points="100,500 130,470 160,500" />
+    <rect x="100" y="500" width="60" height="50" />
+    <!-- House 2 -->
+    <polygon points="200,520 230,490 260,520" />
+    <rect x="200" y="520" width="60" height="50" />
+    <!-- House 3 -->
+    <polygon points="300,500 330,470 360,500" />
+    <rect x="300" y="500" width="60" height="50" />
+    <!-- House 4 -->
+    <polygon points="400,530 430,500 460,530" />
+    <rect x="400" y="530" width="60" height="50" />
+  </g>
+</svg>

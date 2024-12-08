@@ -8,6 +8,7 @@ import litellm
 from PIL import Image
 import io
 from pathlib import Path
+import cairosvg
 
 IMAGES_DIR = Path("static/images")
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
@@ -87,21 +88,25 @@ async def run(state, memory):
             timestamp = int(time.time())
             filename = f"pippin_drawing_{timestamp}.jpg"
             temp_svg = IMAGES_DIR / f"temp_{timestamp}.svg"
+            temp_png = IMAGES_DIR / f"temp_{timestamp}.png"
 
             print(f"Saving SVG to: {temp_svg}")
             with open(temp_svg, 'w') as f:
                 f.write(svg_code)
 
-            # Use PIL to convert SVG to PNG
-            with Image.open(temp_svg) as img:
-                # Convert to RGB for JPEG
+            # Convert SVG to PNG using cairosvg
+            cairosvg.svg2png(url=str(temp_svg), write_to=str(temp_png))
+
+            # Now use PIL to convert PNG to JPEG
+            with Image.open(temp_png) as img:
                 img = img.convert('RGB')
                 filepath = IMAGES_DIR / filename
                 print(f"Saving JPEG to: {filepath}")
                 img.save(filepath, 'JPEG', quality=95)
 
-            # Clean up temporary file
+            # Clean up temporary files
             temp_svg.unlink(missing_ok=True)
+            temp_png.unlink(missing_ok=True)
 
             web_path = f"images/{filename}"
 

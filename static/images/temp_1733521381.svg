@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background Sky -->
+  <rect width="800" height="600" fill="#3B0B39" />
+  
+  <!-- Two Moons -->
+  <circle cx="600" cy="100" r="50" fill="#F0E68C" />
+  <circle cx="700" cy="150" r="30" fill="#FFFACD" />
+  
+  <!-- Alien Crater -->
+  <ellipse cx="400" cy="500" rx="300" ry="150" fill="#2E8B57" />
+  
+  <!-- Bioluminescent Plants -->
+  <circle cx="350" cy="500" r="10" fill="#00FF7F" />
+  <circle cx="450" cy="500" r="12" fill="#7FFFD4" />
+  <circle cx="400" cy="520" r="8" fill="#ADFF2F" />
+  <circle cx="420" cy="510" r="9" fill="#32CD32" />
+  
+  <!-- Rock Formations -->
+  <ellipse cx="200" cy="550" rx="40" ry="20" fill="#A9A9A9" />
+  <ellipse cx="600" cy="550" rx="30" ry="15" fill="#696969" />
+  
+  <!-- Astronaut -->
+  <circle cx="400" cy="400" r="20" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="390" y="420" width="20" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <line x1="390" y1="420" x2="370" y2="440" stroke="#000000" stroke-width="2" />
+  <line x1="410" y1="420" x2="430" y2="440" stroke="#000000" stroke-width="2" />
+  <line x1="390" y1="460" x2="380" y2="490" stroke="#000000" stroke-width="2" />
+  <line x1="410" y1="460" x2="420" y2="490" stroke="#000000" stroke-width="2" />
+  
+  <!-- Futuristic Rover -->
+  <rect x="650" y="480" width="50" height="30" fill="#4682B4" stroke="#000000" stroke-width="2" />
+  <circle cx="665" cy="515" r="7" fill="#000000" />
+  <circle cx="685" cy="515" r="7" fill="#000000" />
+  <rect x="660" y="475" width="20" height="10" fill="#FFD700" />
+</svg>

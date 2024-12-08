@@ -7,10 +7,13 @@ IGNORED_ACTIVITIES = [
     'template_activity',
     'memory_summary',
     # Uncomment activities you want to ignore
-    # 'take_a_walk',
-    # 'nap',
-    # 'draw',
-    # 'play'
+    #'take_a_walk',
+    #'nap',
+    #'draw',
+    #'play',
+    'post_a_tweet',
+    #'post_a_tweet_with_image',  # Uncommented to treat the same as 'post_a_tweet'
+    'read_twitter_mentions'
 ]
 
 async def get_ignored_activities(additional_ignored=None):
@@ -73,6 +76,7 @@ def adjust_probabilities_based_on_state(probabilities, state, activity_indices, 
     walk_index = activity_indices.get('take_a_walk')
     draw_index = activity_indices.get('draw')
     tweet_index = activity_indices.get('post_a_tweet')
+    tweet_with_image_index = activity_indices.get('post_a_tweet_with_image')  # Added
 
     if state.energy < 30:
         if nap_index is not None:
@@ -81,6 +85,8 @@ def adjust_probabilities_based_on_state(probabilities, state, activity_indices, 
                 probabilities[draw_index] = 0.05
             if tweet_index is not None:
                 probabilities[tweet_index] = 0.05
+            if tweet_with_image_index is not None:  # Handle 'post_a_tweet_with_image'
+                probabilities[tweet_with_image_index] = 0.05
         else:
             probabilities = [1.0 / len(activities)] * len(activities)
     elif state.happiness < 40:
@@ -91,6 +97,8 @@ def adjust_probabilities_based_on_state(probabilities, state, activity_indices, 
             probabilities[draw_index] += boost
         if tweet_index is not None:
             probabilities[tweet_index] += boost
+        if tweet_with_image_index is not None:  # Handle 'post_a_tweet_with_image'
+            probabilities[tweet_with_image_index] += boost
         if play_index is not None:
             probabilities[play_index] += boost
         if walk_index is not None:
@@ -104,6 +112,8 @@ def adjust_probabilities_based_on_state(probabilities, state, activity_indices, 
             probabilities[draw_index] += 0.1
         if tweet_index is not None:
             probabilities[tweet_index] += 0.1
+        if tweet_with_image_index is not None:  # Handle 'post_a_tweet_with_image'
+            probabilities[tweet_with_image_index] += 0.1
     elif state.energy > 70:
         active_boost = 0.2
         for idx in range(len(activities)):
@@ -116,6 +126,8 @@ def adjust_probabilities_based_on_state(probabilities, state, activity_indices, 
             probabilities[draw_index] += active_boost
         if tweet_index is not None:
             probabilities[tweet_index] += 0.1
+        if tweet_with_image_index is not None:  # Handle 'post_a_tweet_with_image'
+            probabilities[tweet_with_image_index] += 0.1
 
 # Main function
 async def select_activity(state, activity_functions, memory, additional_ignored_activities=None):

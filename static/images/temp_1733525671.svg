@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  
+  <!-- Dark Clouds -->
+  <ellipse cx="200" cy="100" rx="100" ry="50" fill="#444"/>
+  <ellipse cx="300" cy="130" rx="120" ry="60" fill="#555"/>
+  <ellipse cx="500" cy="80" rx="110" ry="55" fill="#444"/>
+  <ellipse cx="650" cy="120" rx="90" ry="45" fill="#555"/>
+  
+  <!-- Moon -->
+  <circle cx="750" cy="80" r="40" fill="#fdd835"/>
+  
+  <!-- Ruins -->
+  <rect x="100" y="400" width="80" height="200" fill="#6b4f4f" />
+  <rect x="200" y="380" width="100" height="220" fill="#7a5757" />
+  <rect x="350" y="420" width="70" height="180" fill="#6b4f4f" />
+  <rect x="500" y="390" width="90" height="210" fill="#7a5757" />
+  <rect x="650" y="410" width="80" height="190" fill="#6b4f4f" />
+  
+  <!-- Cracked Ground -->
+  <path d="M0,600 L800,600 L800,500 C700,520 600,480 500,500 C400,520 300,480 200,500 C100,520 0,480 0,500 Z" fill="#3e2723"/>
+  <path d="M0,500 C100,520 200,480 300,500 C400,520 500,480 600,500 C700,520 800,480 800,500" stroke="#5d4037" stroke-width="2" fill="none"/>
+  
+  <!-- Magical Energy Swirls -->
+  <path d="M400,300 C420,280 460,300 480,280" stroke="#ffeb3b" stroke-width="4" fill="none"/>
+  <path d="M400,320 C420,300 460,320 480,300" stroke="#ffeb3b" stroke-width="4" fill="none"/>
+  
+  <!-- Wizards -->
+  <!-- Left Wizard -->
+  <circle cx="300" cy="400" r="30" fill="#ffe0b2"/>
+  <path d="M270,430 Q300,380 330,430 Z" fill="#4a148c"/>
+  <path d="M270,430 C275,450 325,450 330,430" fill="#6a1b9a"/>
+  <!-- Left Wizard Robe Patterns -->
+  <path d="M270,430 C275,440 325,440 330,430" stroke="#fff176" stroke-width="2" fill="none"/>
+  
+  <!-- Right Wizard -->
+  <circle cx="500" cy="400" r="30" fill="#ffe0b2"/>
+  <path d="M470,430 Q500,380 530,430 Z" fill="#d32f2f"/>
+  <path d="M470,430 C475,450 525,450 530,430" fill="#c62828"/>
+  <!-- Right Wizard Robe Patterns -->
+  <path d="M470,430 C475,440 525,440 530,430" stroke="#ff8a80" stroke-width="2" fill="none"/>
+  
+  <!-- Lightning Spells -->
+  <path d="M300,400 L400,300 L420,320 L400,340 L450,400" stroke="#ffeb3b" stroke-width="4" fill="none"/>
+  <path d="M500,400 L400,300 L380,320 L400,340 L350,400" stroke="#ffeb3b" stroke-width="4" fill="none"/>
+  
+  <!-- Magic Effects -->
+  <circle cx="400" cy="300" r="10" fill="#ffeb3b"/>
+  <circle cx="420" cy="320" r="5" fill="#ffeb3b"/>
+  <circle cx="380" cy="320" r="5" fill="#ffeb3b"/>
+  <circle cx="400" cy="340" r="8" fill="#ffeb3b"/>
+  
+  <!-- Wizards' Hands -->
+  <circle cx="300" cy="400" r="5" fill="#ffe0b2"/>
+  <circle cx="500" cy="400" r="5" fill="#ffe0b2"/>
+</svg>
