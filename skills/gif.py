@@ -211,6 +211,7 @@ Requirements:
 - For color animations, use hex codes.
 - Include a viewBox="0 0 250 250".
 - No gradients or filters, just solid colors.
+- Use a light colored background.
 - Respond ONLY with the updated SVG code.
 """
 
