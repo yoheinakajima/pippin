@@ -202,20 +202,46 @@ def generate_pippin_image(description: str, api_key: str, output_path: str = "pi
 
     try:
         print("Requesting scene description from GPT-4...")
+        import random
+
+        # List of art styles to randomly suggest
+        art_styles = [
+            "rubber hose", "watercolor", "line art with soft shading", 
+            "chibi", "fantasy", "cartoon", "art nouveau", 
+            "digital with glow effects", "impressionist", 
+            "steampunk", "pixel art", "sketch", 
+            "oil painting", "low-poly", "minimalist",
+            "cubism", "vaporwave", "surrealism", 
+            "graffiti", "pop art", "anime", 
+            "hyperrealism", "cyberpunk", "gothic", 
+            "baroque", "sci-fi concept art", "charcoal drawing", 
+            "mosaic", "flat design", "mid-century modern", 
+            "collage", "isometric", "doodle"
+        ]
+
+        # Select a random art style
+        random_style = random.choice(art_styles)
+
+        print("Requesting scene description from GPT-4...")
         completion = client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": """
+                {"role": "system", "content": f"""
                 Generate a detailed image description and positioning data for a unicorn named Pippin.
-                Provide the background scene description and Pippin's position in the scene. Since pippin will be added after, do not include Pippin or any mention of unicorns in the background description (unless we're depicting a second unicorn, etc).
+                Provide the background scene description and Pippin's position in the scene. 
+                Since Pippin will be added after, do not include Pippin or any mention of unicorns in the background description (unless we're depicting a second unicorn, etc).
                 For position, x and y should be between 0 and 1 (as percentage from left/top),
                 size should be between 0 and 1 (as relative size),
                 and rotation should be in degrees (0-360).
+                Specify the suggested art style provided below in the image description.
+
+                Suggested art style: {random_style}.
                 """},
                 {"role": "user", "content": description}
             ],
             response_format=SceneDescription
         )
+
 
         scene_data = completion.choices[0].message.parsed
         print(f"Parsed scene data: {json.dumps(scene_data.model_dump(), indent=2)}")
