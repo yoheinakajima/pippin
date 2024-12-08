@@ -2,10 +2,26 @@
 name = "python-template"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = [
+    {name = "Your Name", email = "you@example.com"}
+]
 requires-python = ">=3.11"
 dependencies = [
     "aiosqlite>=0.20.0",
     "fastapi>=0.115.5",
     "uvicorn>=0.32.1",
+    "numpy>=1.26.4",
+    "scikit-learn>=1.5.1",
+    "openai>=1.55.2",
+    "httpx==0.24.1",
+    "requests-oauthlib==2.0.0",
+    "litellm>=1.53.1",
+    "pillow>=11.0.0",
+    "svglib>=1.5.1",
+    "requests-oauthlib>=2.0.0",
+    "uvicorn>=0.32.1",
+    "websockets>=14.1",
 ]
+
+[tool.setuptools]
+packages = ["config", "static", "framework", "templates", "activities"]
