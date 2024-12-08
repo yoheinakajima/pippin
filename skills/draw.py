@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import random
 from pathlib import Path
 from PIL import Image
 import cairosvg
@@ -11,25 +12,55 @@ import asyncio
 IMAGES_DIR = Path("static/images")
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
+# Base unicorn SVG (static)
+BASE_UNICORN_SVG = """
+<svg width="250" height="250" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+  <!-- Unicorn Body -->
+  <path d="M80,150 Q60,120 80,90 Q100,60 140,70 Q180,80 160,120 Q150,160 100,160 Z" fill="#fff" stroke="#000" stroke-width="2"></path>
+  <!-- Unicorn Neck and Head -->
+  <path d="M140,70 Q150,60 160,55 Q170,50 175,60 Q180,70 170,80 Q160,85 150,80 Q140,75 140,70 Z" fill="#fff" stroke="#000" stroke-width="2"></path>
+  <!-- Horn -->
+  <polygon points="160,55 155,35 165,35" fill="#ffd700" stroke="#000" stroke-width="1"></polygon>
+  <!-- Ears -->
+  <path d="M165,45 Q166,40 160,43" fill="#fff" stroke="#000" stroke-width="1"></path>
+  <path d="M170,45 Q171,40 165,43" fill="#fff" stroke="#000" stroke-width="1"></path>
+  <!-- Eyes -->
+  <circle cx="162" cy="60" r="3" fill="#000"></circle>
+  <circle cx="158" cy="60" r="1.5" fill="#fff"></circle>
+  <!-- Mane -->
+  <path d="M155,55 Q150,60 155,65 Q150,70 155,75 Q150,80 155,85" stroke="#ff69b4" stroke-width="2" fill="none"></path>
+  <path d="M160,55 Q155,60 160,65 Q155,70 160,75 Q155,80 160,85" stroke="#ff69b4" stroke-width="2" fill="none"></path>
+  <!-- Legs -->
+  <path d="M100,160 L100,190" stroke="#000" stroke-width="2"></path>
+  <path d="M120,160 L120,190" stroke="#000" stroke-width="2"></path>
+  <path d="M140,160 L140,190" stroke="#000" stroke-width="2"></path>
+  <path d="M160,120 Q165,140 160,160" stroke="#000" stroke-width="2"></path>
+  <!-- Tail -->
+  <path d="M80,150 Q70,155 75,160 Q70,165 80,170" stroke="#ff69b4" stroke-width="2" fill="none"></path>
+  <path d="M75,160 Q80,165 75,170" stroke="#ff69b4" stroke-width="2" fill="none"></path>
+  <!-- Hooves -->
+  <ellipse cx="100" cy="190" rx="5" ry="2" fill="#000"></ellipse>
+  <ellipse cx="120" cy="190" rx="5" ry="2" fill="#000"></ellipse>
+  <ellipse cx="140" cy="190" rx="5" ry="2" fill="#000"></ellipse>
+  <ellipse cx="160" cy="160" rx="5" ry="2" fill="#000"></ellipse>
+  <!-- Details on Body -->
+  <path d="M90,120 Q95,110 100,120" stroke="#000" stroke-width="1" fill="none"></path>
+  <path d="M110,130 Q115,120 120,130" stroke="#000" stroke-width="1" fill="none"></path>
+</svg>
+"""
+
 async def generate_pippin_drawing(scene_description: str, api_key_openai: str, output_path: str = None) -> str:
     """
-    Generate a whimsical drawing (JPEG) from a provided scene description.
-    The process:
-    - Extract the most visually interesting moment via GPT-4-like model
-    - Request an SVG illustration via a smaller model (litellm)
-    - Convert the SVG to PNG, then to JPEG
-    - Return the path to the generated JPEG
-
-    :param scene_description: A textual description of the scene to illustrate.
-    :param api_key_openai: Your OpenAI API key.
-    :param output_path: Optional path/filename for the final JPEG. If None, a timestamp-based name is used.
-    :return: The path to the generated JPEG image.
+    Generate a whimsical drawing (JPEG) from a provided scene description, with dynamic use of the base unicorn SVG.
     """
     if not api_key_openai:
         print("OpenAI API key not found. Cannot generate drawing.")
         return None
 
     client = AsyncOpenAI(api_key=api_key_openai)
+
+    # Decide whether to include the base unicorn SVG (50% probability)
+    include_base_unicorn = random.choice([True, False])
 
     # Get scene info from GPT model
     system_msg = "You are an assistant that extracts the most visually interesting scene from a memory."
@@ -51,20 +82,35 @@ async def generate_pippin_drawing(scene_description: str, api_key_openai: str, o
     )
     scene_info = scene_response.choices[0].message.content.strip()
 
-    svg_prompt = f"""Create a whimsical, cute SVG illustration based on this scene:
-    {scene_info}
+    # Generate SVG prompt
+    if include_base_unicorn:
+        svg_prompt = f"""You have a base unicorn SVG (no animations):
 
-    Requirements:
-    - Keep the SVG simple and clean
-    - Use solid colors instead of gradients
-    - Include a viewBox attribute
-    - Make it suitable for a children's book illustration
-    - Ensure the SVG is well-formed and complete
-    - Avoid using gradients, patterns, or filters
-    - Use only basic SVG elements (path, rect, circle, etc.)
+{BASE_UNICORN_SVG}
 
-    Respond only with the SVG code.
-    """
+Update this SVG to incorporate the following scene and visual elements:
+{scene_info}
+
+Requirements:
+- Retain unicorn structure from base SVG.
+- Add visual details based on the scene description.
+- Include a viewBox="0 0 250 250".
+- Use only solid colors, no gradients or filters.
+- Ensure the SVG is well-formed and complete.
+- Respond ONLY with the updated SVG code.
+"""
+    else:
+        svg_prompt = f"""Create a whimsical SVG illustration based on this scene:
+{scene_info}
+
+Requirements:
+- Do NOT include the base unicorn SVG.
+- Add visual details based on the scene description.
+- Include a viewBox="0 0 250 250".
+- Use only solid colors, no gradients or filters.
+- Ensure the SVG is well-formed and complete.
+- Respond ONLY with the SVG code.
+"""
 
     svg_response = litellm.completion(
         model="o1-mini",
