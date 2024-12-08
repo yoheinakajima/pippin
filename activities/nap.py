@@ -9,7 +9,7 @@ async def run(state, memory):
     Description: The character takes a nap to restore energy.
     """
     duration = random.randint(1, 3)
-    await asyncio.sleep(duration*10)
+    await asyncio.sleep(duration*50)
     state.energy = min(state.energy + 30, 100)
     entry = {
         'activity': 'nap',

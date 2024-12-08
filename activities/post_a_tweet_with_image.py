@@ -10,7 +10,7 @@ from skills.draw import generate_pippin_drawing  # Newly added import
 from skills.gif import generate_animated_unicorn
 
 # Set to True to actually post to Twitter, False to skip posting
-ENABLE_TWITTER_POSTING = False
+ENABLE_TWITTER_POSTING = True
 
 class TwitterError(Exception):
     """Custom exception for Twitter API errors"""

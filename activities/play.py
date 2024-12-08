@@ -10,7 +10,7 @@ async def run(state, memory):
     """
     # Simulate activity duration
     duration = random.randint(1, 2)  # Duration in seconds
-    await asyncio.sleep(duration*10)  # Simulate time taken to play
+    await asyncio.sleep(duration*50)  # Simulate time taken to play
 
     # Modify state variables
     state.energy = max(state.energy - 10, 0)  # Decrease energy by 10, minimum 0

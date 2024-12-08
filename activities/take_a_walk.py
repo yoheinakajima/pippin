@@ -133,7 +133,7 @@ async def run(state, memory):
         # Extract values
         description = result.description
         print(description)
-        duration = result.duration_minutes  # Convert to seconds and multiply by 10
+        duration = result.duration_minutes*10  # Convert to seconds and multiply by 10
         state_changes = result.state_changes
 
         # Simulate walk duration
