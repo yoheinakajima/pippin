@@ -241,7 +241,7 @@ Please generate the tweet following the system prompt. Ensure the tweet is less 
         # Extract tweet content
         tweet_content = completion.choices[0].message.content.strip()
         # Ensure the tweet is under 140 characters
-        tweet_content = tweet_content[:140]
+        tweet_content = tweet_content[:280]
 
         # Post to Twitter if enabled
         if ENABLE_TWITTER_POSTING:

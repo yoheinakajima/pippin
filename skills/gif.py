@@ -161,7 +161,7 @@ Animated Elements: [which parts move and how, numeric or color attributes]
 
     # Base unicorn SVG (static)
     base_unicorn_svg = """
-<svg width="250" height="250" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
   <!-- Unicorn Body -->
   <path d="M80,150 Q60,120 80,90 Q100,60 140,70 Q180,80 160,120 Q150,160 100,160 Z" fill="#fff" stroke="#000" stroke-width="2"></path>
   <!-- Unicorn Neck and Head -->
@@ -209,7 +209,7 @@ Requirements:
 - Add multiple animations using <animate> or <animateTransform> with numeric or color values.
 - For animateTransform, use numeric values.
 - For color animations, use hex codes.
-- Include a viewBox="0 0 250 250".
+- Include a viewBox="0 0 1000 1000".
 - No gradients or filters, just solid colors.
 - Use a light colored background.
 - Respond ONLY with the updated SVG code.
