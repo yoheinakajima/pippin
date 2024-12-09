@@ -14,38 +14,39 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
 # Base unicorn SVG (static)
 BASE_UNICORN_SVG = """
-<svg width="250" height="250" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="1000" fill="#f0f8ff"></rect>
   <!-- Unicorn Body -->
-  <path d="M80,150 Q60,120 80,90 Q100,60 140,70 Q180,80 160,120 Q150,160 100,160 Z" fill="#fff" stroke="#000" stroke-width="2"></path>
+  <path d="M320,600 Q240,480 320,360 Q400,240 560,280 Q720,320 640,480 Q600,640 400,640 Z" fill="#fff" stroke="#000" stroke-width="8"></path>
   <!-- Unicorn Neck and Head -->
-  <path d="M140,70 Q150,60 160,55 Q170,50 175,60 Q180,70 170,80 Q160,85 150,80 Q140,75 140,70 Z" fill="#fff" stroke="#000" stroke-width="2"></path>
+  <path d="M560,280 Q600,240 640,220 Q680,200 700,240 Q720,280 680,320 Q640,340 600,320 Q560,300 560,280 Z" fill="#fff" stroke="#000" stroke-width="8"></path>
   <!-- Horn -->
-  <polygon points="160,55 155,35 165,35" fill="#ffd700" stroke="#000" stroke-width="1"></polygon>
+  <polygon points="640,220 620,140 660,140" fill="#ffd700" stroke="#000" stroke-width="4"></polygon>
   <!-- Ears -->
-  <path d="M165,45 Q166,40 160,43" fill="#fff" stroke="#000" stroke-width="1"></path>
-  <path d="M170,45 Q171,40 165,43" fill="#fff" stroke="#000" stroke-width="1"></path>
+  <path d="M660,180 Q664,160 640,172" fill="#fff" stroke="#000" stroke-width="4"></path>
+  <path d="M680,180 Q684,160 660,172" fill="#fff" stroke="#000" stroke-width="4"></path>
   <!-- Eyes -->
-  <circle cx="162" cy="60" r="3" fill="#000"></circle>
-  <circle cx="158" cy="60" r="1.5" fill="#fff"></circle>
+  <circle cx="648" cy="240" r="12" fill="#000"></circle>
+  <circle cx="632" cy="240" r="6" fill="#fff"></circle>
   <!-- Mane -->
-  <path d="M155,55 Q150,60 155,65 Q150,70 155,75 Q150,80 155,85" stroke="#ff69b4" stroke-width="2" fill="none"></path>
-  <path d="M160,55 Q155,60 160,65 Q155,70 160,75 Q155,80 160,85" stroke="#ff69b4" stroke-width="2" fill="none"></path>
+  <path d="M620,220 Q600,240 620,260 Q600,280 620,300 Q600,320 620,340" stroke="#ff69b4" stroke-width="8" fill="none"></path>
+  <path d="M640,220 Q620,240 640,260 Q620,280 640,300 Q620,320 640,340" stroke="#ff69b4" stroke-width="8" fill="none"></path>
   <!-- Legs -->
-  <path d="M100,160 L100,190" stroke="#000" stroke-width="2"></path>
-  <path d="M120,160 L120,190" stroke="#000" stroke-width="2"></path>
-  <path d="M140,160 L140,190" stroke="#000" stroke-width="2"></path>
-  <path d="M160,120 Q165,140 160,160" stroke="#000" stroke-width="2"></path>
+  <path d="M400,640 L400,760" stroke="#000" stroke-width="8"></path>
+  <path d="M480,640 L480,760" stroke="#000" stroke-width="8"></path>
+  <path d="M560,640 L560,760" stroke="#000" stroke-width="8"></path>
+  <path d="M640,480 Q660,560 640,640" stroke="#000" stroke-width="8"></path>
   <!-- Tail -->
-  <path d="M80,150 Q70,155 75,160 Q70,165 80,170" stroke="#ff69b4" stroke-width="2" fill="none"></path>
-  <path d="M75,160 Q80,165 75,170" stroke="#ff69b4" stroke-width="2" fill="none"></path>
+  <path d="M320,600 Q280,620 300,640 Q280,660 320,680" stroke="#ff69b4" stroke-width="8" fill="none"></path>
+  <path d="M300,640 Q320,660 300,680" stroke="#ff69b4" stroke-width="8" fill="none"></path>
   <!-- Hooves -->
-  <ellipse cx="100" cy="190" rx="5" ry="2" fill="#000"></ellipse>
-  <ellipse cx="120" cy="190" rx="5" ry="2" fill="#000"></ellipse>
-  <ellipse cx="140" cy="190" rx="5" ry="2" fill="#000"></ellipse>
-  <ellipse cx="160" cy="160" rx="5" ry="2" fill="#000"></ellipse>
+  <ellipse cx="400" cy="760" rx="20" ry="8" fill="#000"></ellipse>
+  <ellipse cx="480" cy="760" rx="20" ry="8" fill="#000"></ellipse>
+  <ellipse cx="560" cy="760" rx="20" ry="8" fill="#000"></ellipse>
+  <ellipse cx="640" cy="640" rx="20" ry="8" fill="#000"></ellipse>
   <!-- Details on Body -->
-  <path d="M90,120 Q95,110 100,120" stroke="#000" stroke-width="1" fill="none"></path>
-  <path d="M110,130 Q115,120 120,130" stroke="#000" stroke-width="1" fill="none"></path>
+  <path d="M360,480 Q380,440 400,480" stroke="#000" stroke-width="4" fill="none"></path>
+  <path d="M440,520 Q460,480 480,520" stroke="#000" stroke-width="4" fill="none"></path>
 </svg>
 """
 
@@ -92,9 +93,9 @@ Update this SVG to incorporate the following scene and visual elements:
 {scene_info}
 
 Requirements:
-- Retain unicorn structure from base SVG.
+- Retain unicorn structure from base SVG, but adjust his size, rotation, and location accordingly to the scene description.
 - Add visual details based on the scene description.
-- Include a viewBox="0 0 250 250".
+- Include a viewBox="0 0 1000 1000".
 - Use only solid colors, no gradients or filters.
 - Ensure the SVG is well-formed and complete.
 - Respond ONLY with the updated SVG code.
@@ -106,7 +107,7 @@ Requirements:
 Requirements:
 - Do NOT include the base unicorn SVG.
 - Add visual details based on the scene description.
-- Include a viewBox="0 0 250 250".
+- Include a viewBox="0 0 1000 1000".
 - Use only solid colors, no gradients or filters.
 - Ensure the SVG is well-formed and complete.
 - Respond ONLY with the SVG code.
