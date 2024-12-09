@@ -39,7 +39,10 @@ async def run(state, memory):
     Description: Pippin goes on a whimsical walk in Wobbly Woods, encountering various magical creatures and finding joy in simple things.
     """
     # Initialize OpenAI client
-    client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+    client = AsyncOpenAI(
+        api_key=os.getenv('OPENAI_API_KEY'),
+        base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")    
+    )
     if not client.api_key:
         print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
         return
