@@ -14,6 +14,7 @@ IGNORED_ACTIVITIES = [
     'post_a_tweet',
     #'post_a_tweet_with_image',  # Uncommented to treat the same as 'post_a_tweet'
     'read_twitter_mentions'
+    #'create_new_activity'
 ]
 
 async def get_ignored_activities(additional_ignored=None):
