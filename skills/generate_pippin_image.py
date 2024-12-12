@@ -45,19 +45,19 @@ def create_pippin_image(size=(250, 250)):
     gold = "#FFD700"
     pink = "#FF69B4"
 
-    # Scale factor
+    # Scale factor - now using larger base coordinates
     scale_x = size[0] / 250
     scale_y = size[1] / 250
 
     def scale_point(x, y):
         return (x * scale_x, y * scale_y)
 
-    # Body outline points
+    # Body outline points - scaled up by ~1.5x
     body_segments = [
-        [(80,150), (60,120), (80,90)],
-        [(80,90), (100,60), (140,70)],
-        [(140,70), (180,80), (160,120)],
-        [(160,120), (150,160), (100,160)]
+        [(120, 180), (90, 140), (120, 100)],
+        [(120, 100), (150, 60), (190, 75)],
+        [(190, 75), (240, 90), (210, 140)],
+        [(210, 140), (200, 190), (150, 190)]
     ]
 
     # Draw body segments
@@ -66,22 +66,22 @@ def create_pippin_image(size=(250, 250)):
         p0 = scale_point(*segment[0])
         p1 = scale_point(*segment[1])
         p2 = scale_point(*segment[2])
-        points = draw_quadratic_bezier(draw, p0, p1, p2, width=4)  # Increased width
+        points = draw_quadratic_bezier(draw, p0, p1, p2, width=6)  # Increased width
         body_points.extend(points)
 
     # Close the body path
-    draw.line([body_points[-1], scale_point(80,150)], fill=black, width=4)  # Increased width
+    draw.line([body_points[-1], scale_point(120, 180)], fill=black, width=6)
 
     # Fill body
-    draw.polygon(body_points + [scale_point(80,150)], fill=white)
+    draw.polygon(body_points + [scale_point(120, 180)], fill=white)
 
-    # Head and neck
+    # Head and neck - scaled up
     head_segments = [
-        [(140,70), (150,60), (160,55)],
-        [(160,55), (170,50), (175,60)],
-        [(175,60), (180,70), (170,80)],
-        [(170,80), (160,85), (150,80)],
-        [(150,80), (140,75), (140,70)]
+        [(190, 75), (205, 65), (220, 58)],
+        [(220, 58), (235, 50), (242, 65)],
+        [(242, 65), (250, 80), (235, 95)],
+        [(235, 95), (220, 102), (205, 95)],
+        [(205, 95), (190, 88), (190, 75)]
     ]
 
     # Draw head segments
@@ -90,23 +90,23 @@ def create_pippin_image(size=(250, 250)):
         p0 = scale_point(*segment[0])
         p1 = scale_point(*segment[1])
         p2 = scale_point(*segment[2])
-        points = draw_quadratic_bezier(draw, p0, p1, p2, width=4)  # Increased width
+        points = draw_quadratic_bezier(draw, p0, p1, p2, width=6)
         head_points.extend(points)
 
     # Fill head
     draw.polygon(head_points, fill=white)
 
-    # Horn
+    # Horn - made slightly larger
     horn_points = [
-        scale_point(160,55),
-        scale_point(155,35),
-        scale_point(165,35)
+        scale_point(220, 58),
+        scale_point(213, 30),
+        scale_point(227, 30)
     ]
     draw.polygon(horn_points, fill=gold, outline=black)
 
-    # Eyes
-    eye_center = scale_point(162, 60)
-    eye_radius = int(3 * scale_x)
+    # Eyes - scaled up
+    eye_center = scale_point(223, 65)
+    eye_radius = int(4.5 * scale_x)  # Increased size
     draw.ellipse((
         eye_center[0] - eye_radius,
         eye_center[1] - eye_radius,
@@ -115,8 +115,8 @@ def create_pippin_image(size=(250, 250)):
     ), fill=black)
 
     # Eye highlight
-    highlight_center = scale_point(158, 60)
-    highlight_radius = int(1.5 * scale_x)
+    highlight_center = scale_point(217, 65)
+    highlight_radius = int(2.5 * scale_x)  # Increased size
     draw.ellipse((
         highlight_center[0] - highlight_radius,
         highlight_center[1] - highlight_radius,
@@ -124,65 +124,65 @@ def create_pippin_image(size=(250, 250)):
         highlight_center[1] + highlight_radius
     ), fill=white)
 
-    # Mane
+    # Mane - scaled up
     mane_segments = [
-        [(155,55), (150,60), (155,65)],
-        [(155,65), (150,70), (155,75)],
-        [(155,75), (150,80), (155,85)],
-        [(160,55), (155,60), (160,65)],
-        [(160,65), (155,70), (160,75)],
-        [(160,75), (155,80), (160,85)]
+        [(215, 58), (208, 65), (215, 72)],
+        [(215, 72), (208, 80), (215, 88)],
+        [(215, 88), (208, 95), (215, 102)],
+        [(222, 58), (215, 65), (222, 72)],
+        [(222, 72), (215, 80), (222, 88)],
+        [(222, 88), (215, 95), (222, 102)]
     ]
 
     for segment in mane_segments:
         p0 = scale_point(*segment[0])
         p1 = scale_point(*segment[1])
         p2 = scale_point(*segment[2])
-        draw_quadratic_bezier(draw, p0, p1, p2, width=4, fill=pink)  # Increased width
+        draw_quadratic_bezier(draw, p0, p1, p2, width=6, fill=pink)
 
-    # Back legs (straight lines)
-    for x in [100, 120, 140]:
-        start = scale_point(x, 160)
-        end = scale_point(x, 190)
-        draw.line([start, end], fill=black, width=4)  # Increased width
+    # Back legs (straight lines) - scaled up
+    for x in [150, 175, 200]:
+        start = scale_point(x, 190)
+        end = scale_point(x, 230)
+        draw.line([start, end], fill=black, width=6)
 
-        # Hooves
-        hoof_center = scale_point(x, 190)
+        # Hooves - made larger
+        hoof_center = scale_point(x, 230)
         draw.ellipse((
-            hoof_center[0] - 5 * scale_x,
-            hoof_center[1] - 2 * scale_y,
-            hoof_center[0] + 5 * scale_x,
-            hoof_center[1] + 2 * scale_y
+            hoof_center[0] - 8 * scale_x,
+            hoof_center[1] - 3 * scale_y,
+            hoof_center[0] + 8 * scale_x,
+            hoof_center[1] + 3 * scale_y
         ), fill=black)
 
-    # Front leg with curve (from the SVG path)
-    front_leg_points = [(160,120), (165,140), (160,160)]
+    # Front leg with curve - scaled up
+    front_leg_points = [(210, 140), (217, 165), (210, 190)]
     p0 = scale_point(*front_leg_points[0])
     p1 = scale_point(*front_leg_points[1])
     p2 = scale_point(*front_leg_points[2])
-    draw_quadratic_bezier(draw, p0, p1, p2, width=4)  # Increased width
+    draw_quadratic_bezier(draw, p0, p1, p2, width=6)
 
-    # Front hoof
-    front_hoof_center = scale_point(160, 160)
+    # Front hoof - made larger
+    front_hoof_center = scale_point(210, 190)
     draw.ellipse((
-        front_hoof_center[0] - 5 * scale_x,
-        front_hoof_center[1] - 2 * scale_y,
-        front_hoof_center[0] + 5 * scale_x,
-        front_hoof_center[1] + 2 * scale_y
+        front_hoof_center[0] - 8 * scale_x,
+        front_hoof_center[1] - 3 * scale_y,
+        front_hoof_center[0] + 8 * scale_x,
+        front_hoof_center[1] + 3 * scale_y
     ), fill=black)
 
-    # Tail
+    # Tail - scaled up
     tail_segments = [
-        [(80,150), (70,155), (75,160)],
-        [(75,160), (70,165), (80,170)],
-        [(75,160), (80,165), (75,170)]
+        [(120, 180), (105, 187), (112, 194)],
+        [(112, 194), (105, 202), (120, 210)],
+        [(112, 194), (120, 202), (112, 210)]
     ]
 
     for segment in tail_segments:
         p0 = scale_point(*segment[0])
         p1 = scale_point(*segment[1])
         p2 = scale_point(*segment[2])
-        draw_quadratic_bezier(draw, p0, p1, p2, width=4, fill=pink)  # Increased width
+        draw_quadratic_bezier(draw, p0, p1, p2, width=6, fill=pink)
 
     return image
 
