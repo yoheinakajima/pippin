@@ -19,7 +19,11 @@ async def run(state, memory):
     Description: Pippin creates a whimsical illustration based on a recent memory.
     """
     try:
-        client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        # Initialize OpenAI client
+        client = AsyncOpenAI(
+            api_key=os.getenv('OPENAI_API_KEY'),
+            base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        )
         if not client.api_key:
             print("OpenAI API key not found. Set the OPENAI_API_KEY environment variable.")
             return "Pippin couldn't find his drawing supplies."
