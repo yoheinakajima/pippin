@@ -6,6 +6,7 @@ import json
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field
 from typing import Dict
+import random
 
 class StoryResult(BaseModel):
     """Schema for storytelling activity results"""
@@ -86,6 +87,9 @@ async def run(state, memory):
     }
 
     try:
+
+        duration = random.randint(3, 6)  # Duration in seconds
+        await asyncio.sleep(duration*25)  # Simulate time taken
         # Create chat completion with function calling
         completion = await client.chat.completions.create(
             model="gpt-4",  # Ensure correct model name

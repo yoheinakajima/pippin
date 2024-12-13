@@ -6,15 +6,19 @@ from framework.activity_constraints import constraints
 IGNORED_ACTIVITIES = [
     'template_activity',
     'memory_summary',
+    'post_a_tweet',
+    'draw',
+    'read_twitter_mentions',
+    'create_new_activity',
+    'analyze_x_trends',
+    #'fetch_recent_stories',
     # Uncomment activities you want to ignore
     #'take_a_walk',
     #'nap',
-    'draw',
     #'play',
-    'post_a_tweet',
     #'post_a_tweet_with_image',  # Uncommented to treat the same as 'post_a_tweet'
-    'read_twitter_mentions'
-    #'create_new_activity'
+    #'magic_stardust_creation',
+    #'storytelling'
 ]
 
 async def get_ignored_activities(additional_ignored=None):
