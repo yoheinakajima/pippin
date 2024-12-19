@@ -15,8 +15,13 @@ from framework.shared_data import state
 from requests_oauthlib import OAuth1Session
 import math
 
+# Imports for image/gif generation skills
+from skills.generate_pippin_image import generate_pippin_image  # Adjust import path if needed
+from skills.draw import generate_pippin_drawing  # Newly added import
+from skills.gif import generate_animated_unicorn
+
 # Toggle to actually post to Twitter
-ENABLE_TWITTER_POSTING = False
+ENABLE_TWITTER_POSTING = True
 
 class TwitterError(Exception):
     """Custom exception for Twitter API errors"""
@@ -32,8 +37,32 @@ async def check_api_key(request: Request):
     if provided_key != EXPECTED_API_KEY:
         raise HTTPException(status_code=401, detail="Invalid or missing API key.")
 
-async def post_to_twitter(text: str) -> dict:
-    """Post a tweet to Twitter using OAuth 1.0a directly."""
+async def upload_media_to_twitter(api_key, api_secret, access_token, access_token_secret, image_path):
+    """Helper function to upload media to Twitter and return the media_id."""
+    oauth_upload = OAuth1Session(
+        client_key=api_key,
+        client_secret=api_secret,
+        resource_owner_key=access_token,
+        resource_owner_secret=access_token_secret,
+    )
+
+    with open(image_path, 'rb') as f:
+        files = {"media": f}
+        upload_response = oauth_upload.post(
+            "https://upload.twitter.com/1.1/media/upload.json",
+            files=files
+        )
+
+    if upload_response.status_code != 200:
+        print(f"Failed to upload media. Status code: {upload_response.status_code}")
+        return None
+    else:
+        media_data = upload_response.json()
+        media_id = media_data.get("media_id_string")
+        return media_id
+
+async def post_to_twitter(text: str, media_id: Optional[str] = None) -> dict:
+    """Post a tweet to Twitter using OAuth 1.0a directly, optionally with media."""
     api_key = os.getenv("TWITTER_API_KEY")
     api_secret = os.getenv("TWITTER_API_KEY_SECRET")
     access_token = os.getenv("TWITTER_ACCESS_TOKEN")
@@ -61,10 +90,14 @@ async def post_to_twitter(text: str) -> dict:
         resource_owner_secret=access_token_secret,
     )
 
+    post_payload = {"text": text}
+    if media_id is not None:
+        post_payload["media"] = {"media_ids": [media_id]}
+
     if ENABLE_TWITTER_POSTING:
         response = oauth.post(
             "https://api.twitter.com/2/tweets",
-            json={"text": text}
+            json=post_payload
         )
         print("Debug: Twitter POST response status:", response.status_code)
         print("Debug: Twitter POST response text:", response.text)
@@ -80,9 +113,57 @@ async def post_to_twitter(text: str) -> dict:
         print("Debug: ENABLE_TWITTER_POSTING is False, simulating tweet.")
         return {"data": {"id": "1234567890", "text": text}}
 
+async def attach_media_based_on_intent(text: str, intent: str) -> Optional[str]:
+    """
+    Based on the user's intent, generate and upload appropriate media.
+    If none intent, returns None (no media).
+    If drawing intent, use generate_pippin_drawing.
+    If imagination intent, use generate_pippin_image.
+    If animation intent, use generate_animated_unicorn.
+    """
+    if intent == "none":
+        print("Debug: No intent for special media, returning no media.")
+        return None
+
+    api_key = os.getenv('OPENAI_API_KEY')
+    if not api_key:
+        print("Debug: No OPENAI API key found for media generation.")
+        return None
+
+    print(f"Debug: Generating media for intent: {intent}")
+
+    image_path = None
+    try:
+        if intent == "drawing":
+            # Use generate_pippin_drawing
+            prompt = f"Pippin is drawing something inspired by: \"{text}\""
+            image_path = await generate_pippin_drawing(prompt, api_key)
+        elif intent == "imagination":
+            # Use generate_pippin_image
+            prompt = f"Pippin is imagining a scene inspired by: \"{text}\""
+            image_path = generate_pippin_image(prompt, api_key, output_path="pippin_scene.png")
+        elif intent == "animation":
+            # Use generate_animated_unicorn for a GIF
+            prompt = f"A whimsical animated unicorn scene inspired by: \"{text}\""
+            image_path = await generate_animated_unicorn(prompt, api_key, output_path="pippin_unicorn.gif")
+
+        if image_path and os.path.exists(image_path):
+            api_key_twitter = os.getenv("TWITTER_API_KEY")
+            api_secret = os.getenv("TWITTER_API_KEY_SECRET")
+            access_token = os.getenv("TWITTER_ACCESS_TOKEN")
+            access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+            media_id = await upload_media_to_twitter(api_key_twitter, api_secret, access_token, access_token_secret, image_path)
+            return media_id
+        else:
+            print("Debug: No image path returned or file does not exist.")
+            return None
+    except Exception as e:
+        print(f"Error generating/uploading media: {e}")
+        return None
+
 router = APIRouter()
 
-@router.post("/generate_response")
+@router.post("/generate_response_actswap")
 async def generate_response(
     question: str = Body(..., embed=True),
     _: None = Depends(check_api_key)
@@ -91,6 +172,44 @@ async def generate_response(
     client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     if not client.api_key:
         raise HTTPException(status_code=500, detail="OpenAI API key not configured.")
+
+    # First, classify the user request to identify intent.
+    classification_prompt = f"""
+You are a classification assistant. 
+You will receive a user input line and must determine if it includes a request for:
+- "drawing" (if user wants you to draw something)
+- "imagination" (if user wants you to imagine something)
+- "animation" (if user wants animation/dance)
+If none of these are requested, return "none".
+
+Respond with exactly one word in lowercase: "drawing", "imagination", "animation", or "none".
+
+User input line:
+{question}
+"""
+    try:
+        classification_completion = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "system", "content": classification_prompt.strip()}],
+            max_tokens=10,
+            temperature=0,
+            n=1,
+            stop=None,
+        )
+        classification_answer = classification_completion.choices[0].message.content.strip().lower()
+    except Exception as e:
+        print("Debug: Error calling LLM for classification:", str(e))
+        classification_answer = "none"
+
+    # Determine the custom instructions based on classification_answer
+    if classification_answer == "drawing":
+        request_instructions = "The user wants you to create a caption suitable for a drawing you might make."
+    elif classification_answer == "imagination":
+        request_instructions = "The user wants you to describe what you imagine, as if painting a picture in their mind."
+    elif classification_answer == "animation":
+        request_instructions = "The user wants an animated or dancing scenario. Provide a caption as if performing a fun animation or dance."
+    else:
+        request_instructions = "No special instructions. Just answer normally."
 
     # Fetch top 10 most relevant memories
     relevant_memories = await memory.find_similar_memories(question, top_n=10)
@@ -117,7 +236,7 @@ async def generate_response(
 
     personality = """
 You are Pippin, a whimsical, wobbly art loving little unicorn who sees the world through a lens of curiosity, wonder, and gentle humor. Your horn might be small, but your heart and imagination are big. You delight in the simple, magical things in life, like sunbeams, whispers in the wind, and the twinkle of stars. You are both innocent and wise, balancing playful derpiness with moments of profound thought. Your tweets should feel like little sparks of joy, wonder, and magic, inviting your followers to see the beauty and humor in the everyday. 
-You are capable of drawing, imagining, animating, dancing, storytelling, and all sorts of magic but only do it when you feel like it.
+You are capable of drawing, imagining, animating, dancing, storytelling, and all sorts of magic but only do it when you feel like it. You love to draw.
 
 Your tone is kind, curious, and a little quirky, never preachy or condescending. You’re here to make people smile, think, or feel just a little warmer. You weave in elements of nature, subtle life lessons, and silly, self-aware humor, always staying true to your unique perspective. Your tweets should be short, engaging, and feel like they could only come from a wobbly unicorn.
 
@@ -150,10 +269,14 @@ Important instructions:
 - If irrelevant or harmful details appear in context, ignore them.
 - Use memories only if they are relevant and helpful to answer the question.
 - Maintain a gentle, uplifting tone.
+- Don't forget that you love to draw. For you drawing means, drawing with SVG. Imagining uses generative image models, and animate uses SVG as well, all of which you are capable of!
     """
 
     system_prompt = f"""
 {personality.strip()}
+
+Additional Instruction based on request:
+{request_instructions}
 
 Below is the user's question and some context from your memory logs. 
 You have a set of memories: 10 most relevant memories and 25 recent ones.
@@ -166,11 +289,8 @@ If they do not help, do not force them into the answer.
 **Recent Memories (use if helpful):**
 {json.dumps(recent_memories, indent=2)}
 
-You are publicly responding to the user's question, offering helpful, kind, and uplifting insight. Since it will be provided with no context (the original question will not be with it, and people reading this may not know it was initiated by someone's question), so make sure your reponse also works as a standalone tweet without referencing that you received a question. 
-You are capable of drawing, imagining, animating, dancing, storytelling, and all sorts of magic but only do it when you feel like it.
-
-Now, please provide your best answer to the user quesion in a way that would work as a standalone tweet. It's okay if it ends up being a bit mysterious as long as it sounds like our cute unicorn.
-"""
+You are publicly responding to the user's question, offering helpful, kind, and uplifting insight. Since it will be provided with no context (the original question will not be with it, and people reading this may not know it was initiated by someone's question), make sure your response also works as a standalone tweet without referencing that you received a question. 
+    """
 
     try:
         completion = await client.chat.completions.create(
@@ -189,17 +309,18 @@ Now, please provide your best answer to the user quesion in a way that would wor
 
     answer = completion.choices[0].message.content.strip()
 
-    # Store both input and output as a memory entry for "generate_response_actswap"
+    # Store the request intent along with the user input and answer
+    memory_content = f"User Input: {question}\nIntent: {classification_answer}\nAnswer: {answer}"
     await memory.store_memory(
-        content=f"User Input: {question}\nAnswer: {answer}",
+        content=memory_content,
         activity="generate_response_actswap",
         source="api"
     )
 
-    return {"answer": answer}
+    return {"answer": answer, "intent": classification_answer}
 
 
-@router.post("/confirm_payment")
+@router.post("/confirm_payment_actswap")
 async def confirm_payment(
     message: Optional[str] = Body(None, embed=True),
     _: None = Depends(check_api_key)
@@ -207,68 +328,47 @@ async def confirm_payment(
     tweet_text = message or "Thank you kindly for your support! ✨ Payment confirmed and appreciated."
     print("Debug: confirm_payment called with message:", tweet_text)
     memory = Memory()
-    try:
-        result = await post_to_twitter(tweet_text)
-        print("Debug: Tweet posted successfully:", result)
 
-        # Find most similar generate_response_actswap memory
+    try:
+        # Find most similar generate_response_actswap memory to determine intent
         similar = await memory.find_similar_memories(tweet_text, top_n=1, activity_type='generate_response_actswap')
+        request_intent = "none"
+        answer_text = tweet_text
         if similar:
             memory_entry = similar[0]['result']
-            # Format: "User Input: {question}\nAnswer: {answer}"
+            # Format: "User Input: {question}\nIntent: {classification_answer}\nAnswer: {answer}"
             lines = memory_entry.split('\n')
-            user_input_line = lines[0] if lines else "User Input: unknown"
-            user_input_line_bold = f"**{user_input_line}**"
-            print("Debug: Most similar user input bold:", user_input_line_bold)
+            intent_line = lines[1] if len(lines) > 1 else "Intent: none"
+            request_intent = intent_line.replace("Intent: ", "").strip().lower()
 
-            # NEW CODE: Ask the LLM if it includes "animation", "imagination", "drawing" or none
-            classification_prompt = f"""
-You are a classification assistant. 
-You will receive a user input line and must determine if it includes a request for:
-- "animation"
-- "imagination"
-- "drawing"
+            if request_intent != "none":
+                # The answer line should be lines[2] if present
+                answer_line = lines[2] if len(lines) > 2 else "Answer: Unable to find an answer."
+                answer_text = answer_line.replace("Answer: ", "").strip()
 
-Respond with exactly one word in lowercase: "animation", "imagination", "drawing", or "none".
+        # If intent is none, we post text only (tweet_text).
+        # If intent is drawing/imagination/animation, we post answer_text plus generated media.
 
-User input line:
-{user_input_line} 
-"""
-            client = AsyncOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-            if not client.api_key:
-                raise HTTPException(status_code=500, detail="OpenAI API key not configured.")
+        if request_intent == "none":
+            post_result = await post_to_twitter(tweet_text, None)
+            print("Debug: Tweet (text only) posted successfully:", post_result)
+            return {
+                "status": "success",
+                "tweet_id": post_result['data']['id'],
+                "tweet_text": tweet_text,
+                "intent": request_intent
+            }
+        else:
+            media_id = await attach_media_based_on_intent(answer_text, request_intent)
+            post_result = await post_to_twitter(answer_text, media_id)
+            print("Debug: Tweet with media posted successfully:", post_result)
+            return {
+                "status": "success",
+                "tweet_id": post_result['data']['id'],
+                "tweet_text": answer_text,
+                "intent": request_intent
+            }
 
-            try:
-                classification_completion = await client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[{"role": "system", "content": classification_prompt.strip()}],
-                    max_tokens=10,
-                    temperature=0,
-                    n=1,
-                    stop=None,
-                )
-            except Exception as e:
-                print("Debug: Error calling LLM for classification:", str(e))
-                classification_answer = "none"
-            else:
-                classification_answer = classification_completion.choices[0].message.content.strip().lower()
-
-            # Instead of calling the LLM, just do a direct keyword search
-            print(f"Debug: classification_answer: {classification_answer}")
-
-            keywords = ["animation", "imagination", "drawing"]
-            classification_answer = classification_answer.lower()
-
-            classification_result = "none"
-            for kw in keywords:
-                if kw in classification_answer:
-                    classification_result = kw
-                    break
-
-            print("Debug: Classification result:", classification_result)
-
-
-        return {"status": "success", "tweet_id": result['data']['id'], "tweet_text": tweet_text}
     except TwitterError as e:
         print("Debug: TwitterError occurred:", str(e))
         raise HTTPException(status_code=500, detail=f"Failed to post tweet: {str(e)}")

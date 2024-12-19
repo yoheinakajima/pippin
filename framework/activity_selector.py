@@ -17,8 +17,6 @@ IGNORED_ACTIVITIES = [
     #'nap',
     #'play',
     #'post_a_tweet_with_image',  # Uncommented to treat the same as 'post_a_tweet'
-    #'magic_stardust_creation',
-    #'storytelling'
 ]
 
 async def get_ignored_activities(additional_ignored=None):
