@@ -1,4 +1,4 @@
-# main_async.py
+# framework/main.py
 
 import asyncio
 from framework import shared_data
@@ -18,6 +18,11 @@ import datetime
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+from .integration_endpoints import router
+
+# Include the router
+app.include_router(router)
 
 @app.get("/")
 async def get():
