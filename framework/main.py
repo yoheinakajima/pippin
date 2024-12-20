@@ -7,7 +7,7 @@ from framework.activity_loader import load_activities
 from framework.activity_selector import select_activity
 import uvicorn
 from fastapi import FastAPI, WebSocket
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware 
 import os
@@ -41,15 +41,30 @@ app.include_router(router)
 async def get():
     return HTMLResponse(open(os.path.join("templates", "index.html")).read())
 
+
+@app.get("/logs")
+async def get_logs():
+    # Return the logs page
+    return HTMLResponse(open(os.path.join("templates", "logs.html")).read())
+
+@app.get("/api/logs")
+async def get_all_logs():
+    """Return all activity logs from the database as JSON."""
+    memory = Memory()
+    logs = await memory.get_all_activity_logs()
+    return JSONResponse(logs)
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    # Original WebSocket for the main dashboard - unchanged
     await websocket.accept()
     memory = Memory()
     while True:
-        # Fetch the last 10 activity logs
+        # Fetch the last 10 activity logs for the main dashboard
         async with memory.get_db_connection() as db:
             cursor = await db.execute('''
-                SELECT timestamp, activity, result, duration, state_changes
+                SELECT timestamp, activity, result, duration, state_changes, source
                 FROM activity_logs
                 ORDER BY id DESC
                 LIMIT 10
@@ -57,14 +72,15 @@ async def websocket_endpoint(websocket: WebSocket):
             rows = await cursor.fetchall()
             activity_history = []
             for row in rows:
-                timestamp, activity, result, duration, state_changes_str = row
+                timestamp, activity, result, duration, state_changes_str, source = row
                 state_changes = json.loads(state_changes_str) if state_changes_str else {}
                 activity_history.append({
                     'timestamp': timestamp,
                     'activity': activity,
                     'result': result,
                     'duration': duration,
-                    'state_changes': state_changes
+                    'state_changes': state_changes,
+                    'source': source or 'system'
                 })
 
         # Calculate the 24-hour summary
@@ -102,7 +118,6 @@ async def get_24_hour_summary(memory):
             'total_duration': total_duration or 0
         })
     return summary
-
 
 async def run_server():
     config = uvicorn.Config(app=app, host="0.0.0.0", port=8000, log_level="info", lifespan="off")

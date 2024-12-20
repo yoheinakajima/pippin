@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pippin Activity Logs</title>
+    <link rel="stylesheet" href="/static/logs.css">
+</head>
+<body>
+    <header>
+        <h1>Pippin Activity Logs</h1>
+    </header>
+
+    <main>
+        <div class="filters">
+            <input type="text" id="search-input" placeholder="Search logs...">
+            <select id="activity-filter">
+                <option value="">All Activities</option>
+            </select>
+            <select id="source-filter">
+                <option value="">All Sources</option>
+            </select>
+        </div>
+
+        <section id="logs-section">
+            <table id="logs-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Time</th>
+                        <th>Activity</th>
+                        <th>Result</th>
+                        <th>Duration</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody id="logs-body">
+                    <!-- Logs will be populated here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="/static/logs.js"></script>
+</body>
+</html>

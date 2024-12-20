@@ -6,11 +6,11 @@ import pickle
 import os
 import asyncio
 import contextvars
+import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from openai import AsyncOpenAI
 
-# Context variable for current activity_id
 current_activity_id = contextvars.ContextVar('current_activity_id', default=None)
 
 class Memory:
@@ -53,15 +53,34 @@ class Memory:
             ''')
             await db.commit()
 
+    async def get_all_activity_logs(self):
+        async with self.get_db_connection() as db:
+            cursor = await db.execute('''
+                SELECT timestamp, activity, result, duration, state_changes, source 
+                FROM activity_logs
+                ORDER BY timestamp ASC
+            ''')
+            rows = await cursor.fetchall()
+
+        logs = []
+        for row in rows:
+            timestamp, activity, result, duration, state_changes_str, source = row
+            state_changes = json.loads(state_changes_str) if state_changes_str else {}
+            logs.append({
+                'timestamp': timestamp,
+                'activity': activity,
+                'result': result,
+                'duration': duration,
+                'state_changes': state_changes,
+                'source': source or 'system'
+            })
+        return logs
+
     async def store_activity(self, entry):
-        # Convert state_changes and final_state to strings (JSON)
         import json
         state_changes_str = json.dumps(entry.get('state_changes', {}))
         final_state_str = json.dumps(entry.get('final_state', {}))
-
-        # Compute embedding of the result
-        result_text = entry.get('result', '')
-        embedding = await self.compute_embedding(result_text)
+        embedding = await self.compute_embedding(entry.get('result', ''))
         embedding_blob = pickle.dumps(embedding)
 
         async with self.get_db_connection() as db:
@@ -82,17 +101,14 @@ class Memory:
                 state_changes_str,
                 final_state_str,
                 embedding_blob,
-                entry.get('source', 'core_loop'),  # Default to 'core_loop' if not specified
+                entry.get('source', 'core_loop'),
                 entry.get('parent_id')
             ))
             await db.commit()
 
     async def store_memory(self, content, activity, source='activity'):
-        # Compute embedding
         embedding = await self.compute_embedding(content)
         embedding_blob = pickle.dumps(embedding)
-
-        # Get current activity_id from context
         activity_id = current_activity_id.get()
 
         async with self.get_db_connection() as db:
@@ -108,12 +124,11 @@ class Memory:
                 content,
                 embedding_blob,
                 source,
-                None  # Set parent_id if needed
+                None
             ))
             await db.commit()
 
     async def store_state_snapshot(self, state):
-        """Store a snapshot of the current state."""
         timestamp = datetime.datetime.now().isoformat()
         async with self.get_db_connection() as db:
             await db.execute('''
@@ -128,10 +143,8 @@ class Memory:
             await db.commit()
 
     async def compute_embedding(self, text):
-        """Compute embedding using the OpenAI API"""
-        if not self.client.api_key:
+        if not self.client.api_key or not text.strip():
             return None
-
         try:
             response = await self.client.embeddings.create(
                 model="text-embedding-ada-002",
@@ -144,12 +157,10 @@ class Memory:
             return None
 
     async def find_similar_memories(self, text, top_n=5, activity_type=None, source=None):
-        # Compute embedding of the input text
         query_embedding = await self.compute_embedding(text)
         if query_embedding is None:
             return []
 
-        # Fetch embeddings from the database with optional filters
         async with self.get_db_connection() as db:
             sql = 'SELECT id, activity, result, embedding, source FROM activity_logs WHERE embedding IS NOT NULL'
             params = []
@@ -163,7 +174,6 @@ class Memory:
             cursor = await db.execute(sql, params)
             rows = await cursor.fetchall()
 
-        # Compute similarities
         similarities = []
         for row in rows:
             id, activity, result, embedding_blob, memory_source = row
@@ -176,13 +186,11 @@ class Memory:
                 'source': memory_source
             }))
 
-        # Sort and return top N
         similarities.sort(key=lambda x: x[0], reverse=True)
         top_memories = [item[1] for item in similarities[:top_n]]
         return top_memories
 
     async def get_last_activity_time(self, activity_name):
-        """Get the timestamp of the last occurrence of the specified activity."""
         async with self.get_db_connection() as db:
             cursor = await db.execute('''
                 SELECT timestamp FROM activity_logs
@@ -199,7 +207,6 @@ class Memory:
                 return None
 
     async def count_activity_occurrences(self, activity_name, since):
-        """Count how many times the activity has occurred since a given time."""
         async with self.get_db_connection() as db:
             cursor = await db.execute('''
                 SELECT COUNT(*) FROM activity_logs
@@ -212,6 +219,5 @@ class Memory:
                 return 0
 
     async def has_activity_occurred(self, activity_name, since):
-        """Check if the activity has occurred at least once since a given time."""
         count = await self.count_activity_occurrences(activity_name, since)
         return count > 0
